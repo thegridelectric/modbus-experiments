@@ -1,6 +1,6 @@
 # Modbus Experiments
 
-[Modbus][Modbus Spec] is a defacto standard serial request/response protocol
+[Modbus][Modbus Spec] is a de facto standard serial request/response protocol
 used in industrial control since the 1980s. This document investigates the use
 of Modbus over half duplex [RS485](https://en.wikipedia.org/wiki/RS-485). Half
 duplex 485 uses 3 wires (A+, A- and Common), but acts like only a single wire,
@@ -22,7 +22,7 @@ This document summarizes various Modbus experiments, in particular:
 * A Modbus [sniffing kit](#sniffing-kit) 
 * Connecting Modbus devices to hubs such as Hubitat
 
-# Shopping list
+# Shopping lists
 
 
 ## Bus Hardware
@@ -33,7 +33,7 @@ These are useful for setting up a Modbus bus:
 * 5 colors of 22 AWG stranded [wire][AdaFruit-Wires] (2 for power, 3 for data).
 * [Wago connectors] (check wire gauge).
 
-## <a name="connectivity-hardware"> Client connectivity hardware </a>
+## <a name="connectivity-hardware">Client connectivity hardware</a>
 
 Experiments described here used both MacOS and Raspberry Pi clients, both
 connected over serial and IP. Both serial and IP connectivity might be used in
@@ -60,7 +60,7 @@ software. I like [IONinja], but it is not free after a 14 day eval. There are
 other tools available. I found [Serial Port Monitor] unsatisfactory. The 
 [SerialTool] free version might be worth a try. 
 
-In addition to the [client connectivity](#connectivity) listed above,
+In addition to the [client connectivity](#connectivity-hardware) listed above,
 * IP sniffing needs:
   * NetGear Port Mirroring switch: [purchase][Port mirroring switch on amazon] and
     [manual][GS108ev3 manual].
@@ -89,11 +89,13 @@ Experients described here were carried out with. I did experiments with:
 
 * Hubitat
 * Pi for Home Assistant
-  
-# Setting up a <a name="minilab"> mini lab </a>
+
+# Instructions
+
+## Setting up a <a name="minilab">mini lab</a>
 
 
-# Setting up <a name="sniffing-kit"> sniffing </a>
+## Setting up <a name="sniffing-kit">sniffing</a>
 
 # Useful links
 
