@@ -18,8 +18,8 @@ and conveniently allows Modbus protocol to be sniffed by, for example, [Wireshar
 
 This document summarizes various Modbus experiments, in particular:
 
-* Setting up a Modbus [mini lab](#mini-lab)
-* A Modbus [sniffing kit](#sniffing-kit) 
+* Setting up a Modbus [mini lab](#setting-up-a-mini-lab)
+* A Modbus [sniffing kit](#setting-up-sniffing)
 * Connecting Modbus devices to hubs such as Hubitat
 
 # Shopping lists
@@ -60,7 +60,7 @@ software. I like [IONinja], but it is not free after a 14 day eval. There are
 other tools available. I found [Serial Port Monitor] unsatisfactory. The 
 [SerialTool] free version might be worth a try. 
 
-In addition to the [client connectivity](#connectivity-hardware) listed above,
+In addition to the [client connectivity](#client-connectivity-hardware) listed above,
 * IP sniffing needs:
   * NetGear Port Mirroring switch: [purchase][Port mirroring switch on amazon] and
     [manual][GS108ev3 manual].
@@ -92,10 +92,10 @@ Experients described here were carried out with. I did experiments with:
 
 # Instructions
 
-## Setting up a <a name="minilab">mini lab</a>
+## <a name="minilab">Setting up a mini lab</a>
 
 
-## Setting up <a name="sniffing-kit">sniffing</a>
+## <a name="sniffing-kit">Setting up sniffing</a>
 
 # Useful links
 
