@@ -18,9 +18,9 @@ and conveniently allows Modbus protocol to be sniffed by, for example, [Wireshar
 
 This document summarizes various Modbus experiments, in particular:
 
-* Setting up a Modbus [mini lab](#setting-up-a-mini-lab)
-* A Modbus [sniffing kit](#setting-up-sniffing)
-* Connecting Modbus devices to hubs such as Hubitat
+* Setting up a Modbus [mini lab](#mini-lab)
+* A Modbus [sniffing kit](#sniffing-kit)
+* Connecting Modbus devices to automatable hubs such as Hubitat
 
 # Shopping lists
 
@@ -80,22 +80,12 @@ Experients described here were carried out with. I did experiments with:
 * Waveshare Modbus relays: [purchase][Waveshare relays on Amazon] and
   [manual][Waveshare relays].
 
-## Mini lab software
-
-* [pymodbus]
-* [pyserial]
-
-## Hub hardware
-
-* Hubitat
-* Pi for Home Assistant
-
 # Instructions
 
-## <a name="minilab">Setting up a mini lab</a>
+## <a name="minilab">Mini lab</a>
 
 
-## <a name="sniffing-kit">Setting up sniffing</a>
+## <a name="sniffing-kit">Sniffing kit</a>
 
 # Useful links
 
@@ -108,6 +98,7 @@ Experients described here were carried out with. I did experiments with:
 * [pymodbus]
 * [IONinja]
 * [Wireshark]
+
 
 # Hub connectivity
 
@@ -157,3 +148,5 @@ Experients described here were carried out with. I did experiments with:
 [Serial Port Monitor]: https://www.com-port-monitoring.com/downloads.html
 [SerialTool]: https://www.serialtool.com/_en/serial-port-license
 [pyserial]: https://pyserial.readthedocs.io/en/latest/shortintro.html
+[Hubitat Trend]: https://trends.google.com/trends/explore?date=all&geo=US&q=hubitat&hl=en-US
+[Home Assistant Trend]: https://trends.google.com/trends/explore?date=all&geo=US&q=%2Fg%2F11fzxlb_q4&hl=en-US
