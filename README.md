@@ -120,8 +120,8 @@ Experients described here were carried out with. I did experiments with:
 [pymodbus]: https://pymodbus.readthedocs.io/en/latest/source/simulator.html
 [pymodbus parser example]: https://github.com/pymodbus-dev/pymodbus/blob/master/examples/message_parser.py
 [pymodbus generator example]: https://github.com/pymodbus-dev/pymodbus/blob/master/examples/message_generator.py
-[Waveshare Eth/RS485]: www.waveshare.com/wiki/RS485_TO_ETH_(B)
-[Waveshare Eth/RS485 POE]: www.waveshare.com/wiki/RS485_TO_POE_ETH_(B)
+[Waveshare Eth/RS485]: https://www.waveshare.com/wiki/RS485_TO_ETH_(B)
+[Waveshare Eth/RS485 POE]: https://www.waveshare.com/wiki/RS485_TO_POE_ETH_(B)
 [Rod McBain to the rescue]: https://www.youtube.com/watch?v=Xuj2YFZ5zME&t=413s
 [Waveshare Eth/RS485 on Amazon]: https://www.amazon.com/gp/aw/d/B0BGBQJH21/?_encoding=UTF8&pd_rd_plhdr=t&aaxitk=775308fcdd401f801a872fdc2dbde0aa&hsa_cr_id=0&qid=1717868677&sr=1-2-9e67e56a-6f64-441f-a281-df67fc737124&ref_=sbx_be_s_sparkle_sccd_asin_1_img&pd_rd_w=opBhC&content-id=amzn1.sym.417820b0-80f2-4084-adb3-fb612550f30b%3Aamzn1.sym.417820b0-80f2-4084-adb3-fb612550f30b&pf_rd_p=417820b0-80f2-4084-adb3-fb612550f30b&pf_rd_r=F4K0KKF6WDCTFDHQKFRG&pd_rd_wg=ncXV7&pd_rd_r=9c68359e-b279-41d1-b36b-340620ab8513
 [Waveshare Eth/RS485 User manual]: https://files.waveshare.com/upload/4/4d/RS485-to-eth-b-user-manual-EN-v1.33.pdf
