@@ -1,0 +1,14 @@
+[project]
+name = "mbe"
+authors = [{name = "Andrew Schweitzer", email = "schweitz72@gmail.com"}]
+readme = "README.md"
+license = {file = "LICENSE"}
+classifiers = ["License :: OSI Approved :: MIT License"]
+dynamic = ["version"]
+
+dependencies = [
+  "pyserial",
+  "pymodbus",
+  "rich",
+  "typer",
+]

@@ -1,7 +1,7 @@
 from serial import rs485
 import rich
 
-with rs485.RS485('/dev/tty.usbserial-B001K6G3') as ser:
+with rs485.RS485('/dev/tty.usbserial-B001K2B8') as ser:
     rich.print(ser)
     i = 1
     while True:
