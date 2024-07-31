@@ -4,7 +4,7 @@ import rich
 
 from pymodbus.client.base import ModbusBaseSyncClient
 
-from mbe.io import set_address
+from mbe.io import set_device_id
 
 TaidacentRegisters = dict(
     Temperature        = 0x0000,
@@ -19,9 +19,9 @@ TaidacentRegisters = dict(
     HumidityCorrection = 0x006C,
 )
 
-taidacent_temp_correction = -178 & 0xFFFF
-taidacent_read_address = 2
-taidacent_write_address = 2
+TAIDECENT_TEMP_CORRECTION = -178 & 0xFFFF
+TAIDECENT_DEVICE_ID_FACTORY = 1
+TAIDECENT_DEVICE_ID = 2
 
 class Taidecent:
 
@@ -31,7 +31,7 @@ class Taidecent:
     def __init__(
         self,
         client: ModbusBaseSyncClient,
-        device: int = taidacent_read_address
+        device: int = TAIDECENT_DEVICE_ID
     ):
         self.client = client
         self.device = device
@@ -68,8 +68,8 @@ class Taidecent:
             return F
         return C
 
-    def set_address(self, new_device_id) -> None:
-        set_address(self.client, TaidacentRegisters["DeviceAddress"], self.device, new_device_id)
+    def set_device_id(self, new_device_id) -> None:
+        set_device_id(self.client, TaidacentRegisters["DeviceAddress"], self.device, new_device_id)
         self.device = new_device_id
 
     def set_temp_correction(self, correction: int) -> None:

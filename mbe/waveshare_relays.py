@@ -3,10 +3,10 @@ from enum import IntEnum
 
 from pymodbus.client.base import ModbusBaseSyncClient
 
-from mbe.io import set_address
+from mbe.io import set_device_id
 
-WAVESHARE_RELAY_READ_ADDRESS = 0x03
-WAVESHARE_RELAY_WRITE_ADDRESS = 0x03
+WAVESHARE_RELAY_DEVICE_ID_FACTORY = 1
+WAVESHARE_RELAY_DEVICE_ID = 3
 
 class WaveShareRelayControl(IntEnum):
     Close  = 0xFF00
@@ -32,7 +32,7 @@ class WaveshareRelays:
     client: ModbusBaseSyncClient
     device: int
 
-    def __init__(self, client: ModbusBaseSyncClient, device: int = WAVESHARE_RELAY_READ_ADDRESS) -> None:
+    def __init__(self, client: ModbusBaseSyncClient, device: int = WAVESHARE_RELAY_DEVICE_ID) -> None:
         self.client = client
         self.device = device
 
@@ -75,6 +75,6 @@ class WaveshareRelays:
         print(s2)
 
 
-    def set_address(self, new_device_id) -> None:
-        set_address(self.client, WaveShareRelayReadRegisters["DeviceAddress"], self.device, new_device_id)
+    def set_device_id(self, new_device_id) -> None:
+        set_device_id(self.client, WaveShareRelayReadRegisters["DeviceAddress"], self.device, new_device_id)
         self.device = new_device_id

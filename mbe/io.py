@@ -4,8 +4,7 @@ import rich
 
 from pymodbus.client.base import ModbusBaseSyncClient
 
-
-def set_address(client: ModbusBaseSyncClient, address: int, curr_device_id: int, new_device_id: int) -> None:
+def set_device_id(client: ModbusBaseSyncClient, address: int, curr_device_id: int, new_device_id: int) -> None:
     """Change the device id of a modbus server, if that device does not already report new_device_id.
 
     Uses pymodbus read_holding_registers() and write_register()
