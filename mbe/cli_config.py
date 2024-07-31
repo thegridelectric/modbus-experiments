@@ -14,6 +14,7 @@ from mbe.waveshare_relays import WAVESHARE_RELAY_DEVICE_ID
 
 NO_SERIAL_PORT_FOUND = "NO-SERIAL-PORT-SPECIFIED-OR-FOUND"
 
+
 class SerialConfig(BaseModel):
     port: Annotated[Optional[str], Field(validate_default=True)] = None
     baud: int = 9600
@@ -33,14 +34,17 @@ class SerialConfig(BaseModel):
                         if "tty.usbserial" in str_entry:
                             v = str_entry
                             break
-            except: # noqa
+            except:  # noqa
                 pass
         return v
+
 
 class TCPConfig(BaseModel):
     host: str = "192.168.1.210"
 
+
 CONFIG_FILE = Path(xdg.xdg_config_home() / "gridworks" / "mbe" / "config.json")
+
 
 class MbeConfig(BaseModel):
     taidecent_device_id: int = TAIDECENT_DEVICE_ID

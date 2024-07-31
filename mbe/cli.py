@@ -19,6 +19,7 @@ app = typer.Typer(no_args_is_help=True)
 app.add_typer(cli_tai.app, name="tai", help="Interact with taidecent thermometer")
 app.add_typer(cli_rly.app, name="rly", help="Interact with waveshare relays")
 
+
 @app.callback()
 def main_app_callback(
     verbose: bool = False,
@@ -51,26 +52,43 @@ def sniff(port: str = "") -> None:
                 print("  ", end="", flush=True)
             i += 1
 
+
 @app.command()
 def config(
-        taidecent_device_id: Optional[int] = None,
-        waveshare_relay_device_id: Optional[int] = None,
-        serial: Annotated[bool, typer.Option(show_default=False, help="Set serial or tcp mode")] = None,
-        port: Optional[str] = None,
-        host: Optional[str] = None,
-        force: Annotated[bool, typer.Option(show_default=False, help="Force write of config.")] = False,
-        reset: Annotated[bool, typer.Option(show_default=False, help="Overwrite config with defaults. Any specified parameters will be applied on top of defaults.")] = False,
+    taidecent_device_id: Optional[int] = None,
+    waveshare_relay_device_id: Optional[int] = None,
+    serial: Annotated[
+        bool, typer.Option(show_default=False, help="Set serial or tcp mode")
+    ] = None,
+    port: Optional[str] = None,
+    host: Optional[str] = None,
+    force: Annotated[
+        bool, typer.Option(show_default=False, help="Force write of config.")
+    ] = False,
+    reset: Annotated[
+        bool,
+        typer.Option(
+            show_default=False,
+            help="Overwrite config with defaults. Any specified parameters will be applied on top of defaults.",
+        ),
+    ] = False,
 ) -> None:
     """Show config file and contents. Optionally update config file if any parameter specified.
-    Always creates default config file if none is present. """
+    Always creates default config file if none is present."""
     if reset:
         MbeConfig().save()
     cfg = MbeConfig.load()
     update_config = force
-    if taidecent_device_id is not None and taidecent_device_id != cfg.taidecent_device_id:
+    if (
+        taidecent_device_id is not None
+        and taidecent_device_id != cfg.taidecent_device_id
+    ):
         cfg.taidecent_device_id = taidecent_device_id
         update_config = True
-    if waveshare_relay_device_id is not None and waveshare_relay_device_id != cfg.waveshare_relay_device_id:
+    if (
+        waveshare_relay_device_id is not None
+        and waveshare_relay_device_id != cfg.waveshare_relay_device_id
+    ):
         cfg.waveshare_relay_device_id = waveshare_relay_device_id
         update_config = True
     if serial is not None:
@@ -90,6 +108,7 @@ def config(
     cfg = MbeConfig.load()
     rich.print(f"Config file: {cfg.path}")
     rich.print(cfg)
+
 
 @app.command()
 def run(itr: int = 3) -> None:
@@ -114,6 +133,7 @@ def run(itr: int = 3) -> None:
             mode = WaveShareRelayControl.Open
         relays.write_relay(relay_idx=0, mode=mode)
         i += 1
+
 
 if __name__ == "__main__":
     app()

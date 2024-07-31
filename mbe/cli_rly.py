@@ -8,6 +8,7 @@ from mbe.waveshare_relays import WaveshareRelays
 
 app = typer.Typer(no_args_is_help=True)
 
+
 @app.command("set")
 def set_relay(idx: int, closed: bool) -> None:
     cfg = MbeConfig.load()
@@ -15,6 +16,7 @@ def set_relay(idx: int, closed: bool) -> None:
     client.connect()
     relays = WaveshareRelays(client, device=cfg.waveshare_relay_device_id)
     relays.write_relay(relay_idx=idx, mode=closed)
+
 
 @app.command("set-all")
 def set_all_relays(closed: bool) -> None:
@@ -24,6 +26,7 @@ def set_all_relays(closed: bool) -> None:
     relays = WaveshareRelays(client, device=cfg.waveshare_relay_device_id)
     relays.write_all_relays(mode=closed)
 
+
 @app.command("read")
 def read_relays() -> None:
     cfg = MbeConfig.load()
@@ -32,8 +35,12 @@ def read_relays() -> None:
     relays = WaveshareRelays(client, device=cfg.waveshare_relay_device_id)
     relays.read_all_relays()
 
+
 @app.command()
-def set_device_id(from_id: int = WAVESHARE_RELAY_DEVICE_ID_FACTORY, to_id: int = WAVESHARE_RELAY_DEVICE_ID):
+def set_device_id(
+    from_id: int = WAVESHARE_RELAY_DEVICE_ID_FACTORY,
+    to_id: int = WAVESHARE_RELAY_DEVICE_ID,
+):
     cfg = MbeConfig.load()
     client = make_client.make(cfg)
     client.connect()

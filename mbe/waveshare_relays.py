@@ -8,36 +8,39 @@ from mbe.io import set_device_id
 WAVESHARE_RELAY_DEVICE_ID_FACTORY = 1
 WAVESHARE_RELAY_DEVICE_ID = 3
 
+
 class WaveShareRelayControl(IntEnum):
-    Close  = 0xFF00
-    Open   = 0x0000
-    Flip   = 0x5500
+    Close = 0xFF00
+    Open = 0x0000
+    Flip = 0x5500
+
 
 WAVESHARE_READ_ALL_RELAYS_ADDRESS = 0x0000
 WAVESHARE_READ_WRITE_ALL_RELAYS_COUNT = 0x0008
 WAVESHARE_WRITE_ALL_RELAYS_IDX = 0xFF
 
 WaveShareRelayReadRegisters = dict(
-    DeviceAddress   = 0x4000,
-    SoftwareVersion = 0x8000,
+    DeviceAddress=0x4000,
+    SoftwareVersion=0x8000,
 )
 WaveShareRelayWriteRegisters = dict(
-    DeviceAddress   = 0x4000,
-    BaudRate        = 0x2000,
+    DeviceAddress=0x4000,
+    BaudRate=0x2000,
 )
-
 
 
 class WaveshareRelays:
     client: ModbusBaseSyncClient
     device: int
 
-    def __init__(self, client: ModbusBaseSyncClient, device: int = WAVESHARE_RELAY_DEVICE_ID) -> None:
+    def __init__(
+        self, client: ModbusBaseSyncClient, device: int = WAVESHARE_RELAY_DEVICE_ID
+    ) -> None:
         self.client = client
         self.device = device
 
     def write_relay(self, relay_idx: int, mode: WaveShareRelayControl | bool) -> None:
-        time.sleep(.2)
+        time.sleep(0.2)
         if isinstance(mode, bool):
             if mode is True:
                 mode = WaveShareRelayControl.Close
@@ -45,7 +48,7 @@ class WaveshareRelays:
                 mode = WaveShareRelayControl.Open
         self.client.write_coil(
             address=relay_idx,
-            value=mode.value, # noqa
+            value=mode.value,  # noqa
             slave=self.device,
         )
 
@@ -54,7 +57,7 @@ class WaveshareRelays:
 
     def read_all_relays(self) -> None:
         print("WaveShare Relays")
-        time.sleep(.2)
+        time.sleep(0.2)
         resp = self.client.read_coils(
             address=WAVESHARE_READ_ALL_RELAYS_ADDRESS,
             count=WAVESHARE_READ_WRITE_ALL_RELAYS_COUNT,
@@ -74,7 +77,11 @@ class WaveshareRelays:
         print(s1)
         print(s2)
 
-
     def set_device_id(self, new_device_id) -> None:
-        set_device_id(self.client, WaveShareRelayReadRegisters["DeviceAddress"], self.device, new_device_id)
+        set_device_id(
+            self.client,
+            WaveShareRelayReadRegisters["DeviceAddress"],
+            self.device,
+            new_device_id,
+        )
         self.device = new_device_id
