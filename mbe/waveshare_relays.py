@@ -48,7 +48,7 @@ class WaveshareRelays:
                 mode = WaveShareRelayControl.Open
         self.client.write_coil(
             address=relay_idx,
-            value=mode.value,  # noqa
+            value=mode.value,  # type: ignore
             slave=self.device,
         )
 

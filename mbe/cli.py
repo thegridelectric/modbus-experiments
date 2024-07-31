@@ -11,6 +11,7 @@ from mbe import cli_rly
 from mbe import cli_tai
 from mbe import make_client
 from mbe.cli_config import MbeConfig
+from mbe.cli_config import Modes
 from mbe.taidecent import Taidecent
 from mbe.waveshare_relays import WaveShareRelayControl
 from mbe.waveshare_relays import WaveshareRelays
@@ -25,13 +26,14 @@ def main_app_callback(
     verbose: bool = False,
 ):
     if verbose:
+        print("Enabling verbose logging")
         logging.basicConfig()
         log = logging.getLogger()
         log.setLevel(logging.DEBUG)
 
 
 @app.command()
-def sniff(port: str = "") -> None:
+def sniff(port: Optional[str] = None) -> None:
     """Sniff a serial port"""
     cfg = MbeConfig.load()
     if not port:
@@ -58,7 +60,7 @@ def config(
     taidecent_device_id: Optional[int] = None,
     waveshare_relay_device_id: Optional[int] = None,
     serial: Annotated[
-        bool, typer.Option(show_default=False, help="Set serial or tcp mode")
+        Optional[bool], typer.Option(show_default=False, help="Set serial or tcp mode")
     ] = None,
     port: Optional[str] = None,
     host: Optional[str] = None,
@@ -94,7 +96,7 @@ def config(
     if serial is not None:
         mode = "serial" if serial else "tcp"
         if mode != cfg.mode:
-            cfg.mode = mode
+            cfg.mode = Modes(mode)
             update_config = True
     if port and port != cfg.serial.port:
         cfg.serial.port = port

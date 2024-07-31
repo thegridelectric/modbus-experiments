@@ -1,6 +1,6 @@
+from enum import Enum
 from pathlib import Path
 from typing import Annotated
-from typing import Literal
 from typing import Optional
 
 import rich
@@ -46,10 +46,15 @@ class TCPConfig(BaseModel):
 CONFIG_FILE = Path(xdg.xdg_config_home() / "gridworks" / "mbe" / "config.json")
 
 
+class Modes(str, Enum):
+    serial = "serial"
+    tcp = "tcp"
+
+
 class MbeConfig(BaseModel):
     taidecent_device_id: int = TAIDECENT_DEVICE_ID
     waveshare_relay_device_id: int = WAVESHARE_RELAY_DEVICE_ID
-    mode: Literal["tcp", "serial"] = "serial"
+    mode: Modes = Modes.serial
     serial: SerialConfig = SerialConfig()
     tcp: TCPConfig = TCPConfig()
 

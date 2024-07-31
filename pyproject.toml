@@ -27,3 +27,9 @@ pre-commit-hooks = "^4.6.0"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[[tool.mypy.overrides]]
+module = [
+    "serial",
+]
+ignore_missing_imports = true

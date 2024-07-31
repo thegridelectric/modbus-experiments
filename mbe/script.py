@@ -7,6 +7,7 @@ import time
 
 from pymodbus.client import ModbusSerialClient
 from pymodbus.client import ModbusTcpClient
+from pymodbus.client.base import ModbusBaseSyncClient
 
 ## MODIFY AS NEEDED #####
 serial = True
@@ -20,7 +21,7 @@ if __name__ == "__main__":
         logging.basicConfig()
         log = logging.getLogger()
         log.setLevel(logging.DEBUG)
-
+    client: ModbusBaseSyncClient
     if serial:
         client = ModbusSerialClient(serial_port, baudrate=9600)
     else:
