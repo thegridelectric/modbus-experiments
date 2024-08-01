@@ -370,50 +370,28 @@ co-exist on the bus:
    ```
 3. Wire the [Waveshare relay board][Waveshare relays] to  to power and to the 
    RS485 data bus.
-4. Verify you hear at least one click when you run:
-   ```
+4. Configure Waveshare relay device ID to default value:
+   ```shell
    mbe config --waveshare-relay-device-id 1
+   ```
+5. Verify you hear at least one click when you run:
+   ```shell
    mbe rly set-all 0
    mbe rly read
    mbe rly set-all 1
    mbe rly read
    ```
-5. Change the device ID of the relay board: 
+6. Change the device ID of the relay board: 
    ```shell
    mbe rly set-device-id --from-id 1 --to-id 3
    ```
-6. Verify you can interact with both devices at their new addresses:
+7. Verify you can interact with both devices at their new addresses:
    ```shell
    mbe run
    ```
 
 
 ## <a name="sniffing-kit">Sniffing kit</a>
-
-# Useful links
-
-* [Waveshare Eth/RS485]
-  * [Rod McBain to the rescue][Rod McBain]
-* [Waveshare USB/RS485 on Amazon]
-* [Online Modbus parser]
-* [Function Codes][Modbus Function Codes]
-* [Spec][Modbus Spec]
-* [pymodbus]
-* [IONinja]
-* [Wireshark]
-
-
-# Hub connectivity
-
-## Bridges
-  
-### "Hand written" HTTP to Modbus
-
-### Node-red
-
-### Stride
-
-### Home Assistant
 
 [Wago connectors]: https://www.wago.com/us/c/wire-splicing-connectors?f=%3Afacet_product_Produkthauptfunktion_5200%3ASplicing%20Connector%20with%20Levers%3Afacet_product_Betaetigungsart_01_3901%3ALever&sort=relevance&pageSize=20
 [Wireshark]: https://www.wireshark.org/
