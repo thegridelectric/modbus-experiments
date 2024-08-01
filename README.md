@@ -39,10 +39,11 @@ Experiments described here used both MacOS and Raspberry Pi clients, both
 connected over serial and IP. Both serial and IP connectivity might be used in
 different contexts. Connectivity equipment includes: 
 
-* Waveshare ModbusTCP gateway: [purchase][Waveshare Eth/RS485 on Amazon] and
-  [manual][Waveshare Eth/RS485]. 
+* Waveshare ModbusTCP gateway: [purchase][Waveshare Eth/RS485 on Amazon], 
+  [web page][Waveshare Eth/RS485] and [manual][Waveshare Eth/RS485 User Manual]. 
 * Waveshare USB to RS485 dongle: [purchase][Waveshare USB/RS485 on Amazon] and
-  [manual][Waveshare USB/RS485].
+  [manual][Waveshare USB/RS485]. Two might be useful to both speak on and sniff
+  a serial-only bus.
 * [USB-C/USB-A] cable for connecting Macintosh to USB dongle.
 * [USB-A extension cable] for connecting Pi to USB dongle when a different
   dongle, such as the [Zooz Z-Wave dongle] blocks access. 
@@ -84,13 +85,315 @@ Experients described here were carried out with. I did experiments with:
 
 ## <a name="minilab">Mini lab</a>
 
+### A simple read
+
+Start with a [really simple script][simple script] in which the use of pymodbus to interact with
+a device is very directly visible. In this case, we will read the temperature
+from the Taidecent thermometer.
+
+1. Wire the Taidecent thermometer to power and to the RS485 data bus. The 
+   Taidecent thermomenter does not use the RS485 Common wire.
+2. Wire one [USB serial dongle][Waveshare USB/RS485] to the RS485 data bus. 
+   The dongle gets power from the USB connection. 
+3. Connect the USB serial dongle to the [USB-C/USB-A] cable, and connect the 
+   USB-C/USB-A cable to your macintosh. 
+4. Clone this repo, Create virtual environment, activate it, and install the
+   prequisites.
+    ```shell
+    git clone https://github.com/thegridelectric/modbus-experiments.git
+    cd modbus-experiments
+    poetry install
+    poetry shell
+    pre-commit install 
+    ```
+    This will install [pymodbus], [pyserial], a [simple script], a cli for
+    more involved experiments (`mbe`) and development tools. To just run the 
+    simple script all you would need to do is: 
+    
+    ```shell
+    git clone https://github.com/thegridelectric/modbus-experiments.git
+    cd modbus-experiments
+    python -m venv .venv
+    source .venv/bin/activate
+    pip install pyserial pymodbus rich
+    ```
+5. Find your serial port: 
+    ```shell
+    ls /dev | grep tty.usbserial
+    ```
+    You should see an entry such as:
+    ```
+    tty.usbserial-B001K2B8
+    ```
+    in which case your serial port will be:
+    ```
+    /dev/tty.usbserial-B001K2B8
+    ```
+6. Modify `mbe/script.py` to contain your actual serial port. 
+7. Run `mbe/script.py`:
+   ```shell
+   python mbe/script.py
+   ```
+   You should see output such as: 
+   ```
+   Read device 1, memory address 0x00  (Temperature)  Raw:2757  27.57°C  81.63°F
+   ```
+   This code boils down to:
+   ```python
+   import time
+   from pymodbus.client import ModbusSerialClient
+   client = ModbusSerialClient("/dev/tty.usbserial-B001K2B8", baudrate=9600)
+   client.connect()
+   time.sleep(.2)
+   resp = client.read_holding_registers(address=0, slave=1, count=1)
+   print(resp.registers[0])
+   ```
+    If you have errors, the most likely sources are: 
+    * Serial port name is wrong.
+    * Device id ('slave') is not configured to 1 on the Taidecent (it should be
+      by default).
+    * Faulty wiring or bus power. 
+   
+    If that does not resolve questions, see next section.
+
+### Simple sniffing
+
+Even if you don't have errors it is instructive to watch the raw bytes on the
+bus. You can do that with a second [USB serial dongle][Waveshare USB/RS485]: 
+
+1. Wire the second USB serial dongle to the RS485 data bus.
+2. Connect the second USB serial dongle to the other USB-A connector on the
+   [USB-C/USB-A] cable.
+3. Find the name of the second serial port: 
+    ```shell
+    ls /dev | grep tty.usbserial
+    ```
+    You should see something like: 
+    ```
+    tty.usbserial-B001K2B8
+    tty.usbserial-B001K6G3
+    ```
+
+    Note which is the old one and which is the new one. 
+4. Open a new terminal (correct this command for the actual second port): 
+   ```shell
+   cd modbus-experiments
+   poetry shell
+   mbe sniff --port /dev/tty.usbserial-B001K6G3
+   ```
+   You should see something like: 
+    ```
+    Sniffing on: RS485<id=0x100ca3400, open=True>(port='/dev/tty.usbserial-B001K6G3', 
+    baudrate=9600, bytesize=8, parity='N', stopbits=1, timeout=None, xonxoff=False, 
+    rtscts=False, dsrdtr=False)
+    ```
+   If you do not, check your config with: 
+   ```shell
+   mbe config
+   ```
+   and also consider error sources listed above.
+5. Now in the first terminal, run the simple script again:
+   ```shell
+   python mbe/script.py
+   ```
+   In the first terminal you should see something like:
+   ```
+   Read device 1, memory address 0x00  (Temperature)  Raw:2758  27.58°C  81.64°F
+   ```
+   and in the second terminal you should see something like: 
+   ```
+   01030000  0001840A  0103020A  C63EB6
+   ```
+   What does this mean? Since we saw the temperature printed, we know there was
+   a request and a response, but because there is no framing we don't know
+   where the request ends and the response begins. We could parse it from the
+   spec but it's much faster to use a parser. A quick compromise is to make a 
+   guess and then use this awesome [online Modbus parser] from Rapid SCADA.
+   If we paste all those bytes into the parser we get an error. But without
+   carefully parsing the request and response we can note that non-exotic 
+   requests starts with one byte of device id and one byte of function code and 
+   the response mirrors that. Both have a two byte CRC at the end which is 
+   likely to look like "some random hex number". With that in mind we can glance
+   at the bytes and guess that: 
+   ```
+   request:  01030000  0001840A  
+   response: 0103020A  C63EB6
+   ```
+   We can now paste each of those into the [online Modbus parser] and get a
+   sensible explanation of data exchange. **This is too cumbersome** for 
+   interesting conversations. For those we need a real parser like [Wireshark]
+   or [IONinja]. Wireshark is free, so we will start with that. To watch Modbus
+   with Wireshark, we need to set up the
+   [Waveshare ModbusTCP gateway][Waveshare Eth/RS485 User manual].
+  
+
+### <a name="waveshare-gateway">Waveshare gateway</a>
+
+The [Waveshare ModbusTCP gateway][Waveshare Eth/RS485] allows us to
+communicate to a Modbus serial bus over TCP. To use the Waveshare gateway we
+need choose static IP or DHCP or DHCP with a network name reservation. I will
+describe the latter since it is practical and robust. As [Rod McBain] notes, 
+the Waveshare gateway needs to be configured with Waveshare's [vircom] windows
+program. In order to use Wireshark to sniff communication to the gateway, the
+machine running Wireshark must see the traffic going to the gateway. Here we
+assume the only traffic going to the gateway is coming from the machine running
+wireshark, so we do not need a [special network switch][Port mirroring switch]
+or to configure port mirroring.
+
+1. Attach the gateway to RS485 data, to power, and to Ethernet.
+2. Download and install [Vircom] on a Windows machine. 
+3. Start Vircom. 
+4. Press "Device"
+5. The factory setting gateway will be at 192.168.1.254. Press "Auto Search" if
+   the gateway isn't present. 
+6. Double click on the row for the gateway. 
+7. Note the "Dev Name" field. This is the gateway's network name. Confirm that with:
+   ```shell
+   # replace "DEV_NAME_SHOWN" with value of Dev Name field.
+   ping DEV_NAME_SHOWN.local
+   ```
+8. Log into your home router. In the section that configures the LAN, add an
+   address reservation for that network name. Save your changes. 
+9. Make these changes in vircom:
+   * Change "IP Mode" to DHCP.
+   * Set the baud rate to 9600.
+   * Set the "Transfer Protocol" to "Modbus_TCP Protocol"
+   * Press "Modify Setting" 
+10. Wait a moment. If the IP address does not change to the value of your
+    reservation, stop stop all Vircom windows, cycle power on the gateway and
+    restart Vircom. Vircom should now show the expected IP address. You cross 
+    check by pinging the network name and by logging into your home router and
+    looking at devices attached to the LAN. 
+11. Once the gateway has the desired IP, stop all Vircom windows. You can now
+    put away your Windows machine.
+12. Test that Modbus is working via the gateway by modifying `mbe/script.py` so
+    that `serial = False` and `host` has the correct IP address. 
+13. Run
+    ```shell
+    python mbe/script.py
+    ```
+    You should see the temperature printed as before. If you have errors, check
+    that the IP address is correct. Another likey source of errors is the
+    gateway wiring. You can get also information about your gateway connection
+    by setting `serial = True` and noting what behavior changes. If that does
+    not resolve questions, see next section.
+
+### Wireshark sniffing
+
+Even if you don't have errors it is instructive to watch communication using 
+[Wireshark]. 
+
+Note that Wireshark uses two kinds of filters, with two different
+filter languages: 
+* [Capture filters] control which packets are actually captured. You select
+  capture filters when you start capturing. They can reduce the size of captured
+  data. 
+* [Display filters] control which packets are displayed during capture. They can
+  be changed during capture. 
+* 
+
+If you don't expect IP connection issues, a capture filter will reduce clutter.
+On the other hand, if you are having trouble connecting, it might be better to
+use no capture filter and use display filters to try to better understand what 
+is happening. A comparison of simple filters: 
+```
+capture: host 192.168.1.210
+display: ip.addr==192.168.1.210
+```
+
+Setup and usage:
+1. [Install][Wireshark download] Wireshark. 
+2. Start Wireshark.
+3. Choose which network interface to capture on (e.g. "Wi-Fi en0").
+4. If you think your script execution found the right IP address, use a capture
+   filter with the IP address of the gateway such as
+   ```
+   host 192.168.1.210
+   ```
+   If you are having IP connectivity issues, use no capture filter. 
+5. Start the capture.
+6. In a terminal, run the script: 
+   ```shell
+   python mbe/script.py
+   ```
+   You should see a bunch of rows in Wireshark containint at least the entire
+   TCP connection used by the script. If you can successfully reach the
+   gateway you should see two rows with Protocol of Modbus/TCP. If you select
+   the "Query" row, you should see a break down of the protocol stack used by 
+   that packet in the lower left hand corner. You would be able to click on 
+   "Modbus" in that breakdown and see a breakdown of the fields that will be
+   put on the serial bus. Note there is no CRC; that is computed before putting
+   the data on the bus; to see that you need to sniff on the actual serial port.
+
+If you are having connectivity issues you might want to start with no capture
+filter and instead use display filters to remove unrelated packets from view, at
+least until you've concluded that you and the gateway agree about its IP address.
+You can also filter by MAC address since you should be able to figure out the 
+MAC address of the gateway. You might want to try pinging the device while the
+capture is running. 
+
+### Configuring multiple devices 
+If multiple servers are present on a Modbus bus, they must have different device
+IDs. Generally devices ship with a the same default ID (1), so you have to
+change their device IDs. How to change their device ID must be documented by the
+device. It is typically done by writing a register. We will use the `mbe` cli
+to change device address, which just calls `write_register()` on the pymodbus
+client.
+
+Check out the `mbe` cli:
+```shell
+mbe --help
+mbe config --help
+mbe tai --help
+mbe rly --help
+```
+
+Check out the current config: 
+```shell
+mbe config
+```
+
+Config can also be changed by editing config.json file or with the config
+command. For example, this command sets the IP address of the gateway to 
+192.168.1.210 and specifies ModbusTCP, not serial, should be used.
+```shell
+mbe config --host 192.168.1.210 --no-serial
+```
+
+Now we change the device IDs of the Taidecent and Waveshare Relays so they can
+co-exist on the bus:
+1. Using `mbe config` or the config.json file, verify serial or TCP mode is
+   specified and host IP and serial port are set up as expected.
+2. Change the device ID of the Taidecent: 
+   ```shell
+   mbe tai set-device-id --from-id 1 --to-id 2
+   ```
+3. Wire the [Waveshare relay board][Waveshare relays] to  to power and to the 
+   RS485 data bus.
+4. Verify you hear at least one click when you run:
+   ```
+   mbe config --waveshare-relay-device-id 1
+   mbe rly set-all 0
+   mbe rly read
+   mbe rly set-all 1
+   mbe rly read
+   ```
+5. Change the device ID of the relay board: 
+   ```shell
+   mbe rly set-device-id --from-id 1 --to-id 3
+   ```
+6. Verify you can interact with both devices at their new addresses:
+   ```shell
+   mbe run
+   ```
+
 
 ## <a name="sniffing-kit">Sniffing kit</a>
 
 # Useful links
 
 * [Waveshare Eth/RS485]
-  * [Rod McBain to the rescue]
+  * [Rod McBain to the rescue][Rod McBain]
 * [Waveshare USB/RS485 on Amazon]
 * [Online Modbus parser]
 * [Function Codes][Modbus Function Codes]
@@ -114,6 +417,9 @@ Experients described here were carried out with. I did experiments with:
 
 [Wago connectors]: https://www.wago.com/us/c/wire-splicing-connectors?f=%3Afacet_product_Produkthauptfunktion_5200%3ASplicing%20Connector%20with%20Levers%3Afacet_product_Betaetigungsart_01_3901%3ALever&sort=relevance&pageSize=20
 [Wireshark]: https://www.wireshark.org/
+[Wireshark download]: https://www.wireshark.org/download.html
+[capture filters]: https://www.tcpdump.org/manpages/pcap-filter.7.html
+[display filters]: https://www.wireshark.org/docs/man-pages/wireshark-filter.html
 [Modbus Spec]: https://www.modbus.org/docs/Modbus_Application_Protocol_V1_1b3.pdf
 [Modbus TCP]: https://www.modbus.org/docs/Modbus_Messaging_Implementation_Guide_V1_0b.pdf
 [Modbus Function Codes]: https://ozeki.hu/p_5873-modbus-function-codes.html
@@ -122,10 +428,11 @@ Experients described here were carried out with. I did experiments with:
 [pymodbus generator example]: https://github.com/pymodbus-dev/pymodbus/blob/master/examples/message_generator.py
 [Waveshare Eth/RS485]: https://www.waveshare.com/wiki/RS485_TO_ETH_(B)
 [Waveshare Eth/RS485 POE]: https://www.waveshare.com/wiki/RS485_TO_POE_ETH_(B)
-[Rod McBain to the rescue]: https://www.youtube.com/watch?v=Xuj2YFZ5zME&t=413s
+[Rod McBain]: https://www.youtube.com/watch?v=Xuj2YFZ5zME&t=413s
 [Waveshare Eth/RS485 on Amazon]: https://www.amazon.com/gp/aw/d/B0BGBQJH21/?_encoding=UTF8&pd_rd_plhdr=t&aaxitk=775308fcdd401f801a872fdc2dbde0aa&hsa_cr_id=0&qid=1717868677&sr=1-2-9e67e56a-6f64-441f-a281-df67fc737124&ref_=sbx_be_s_sparkle_sccd_asin_1_img&pd_rd_w=opBhC&content-id=amzn1.sym.417820b0-80f2-4084-adb3-fb612550f30b%3Aamzn1.sym.417820b0-80f2-4084-adb3-fb612550f30b&pf_rd_p=417820b0-80f2-4084-adb3-fb612550f30b&pf_rd_r=F4K0KKF6WDCTFDHQKFRG&pd_rd_wg=ncXV7&pd_rd_r=9c68359e-b279-41d1-b36b-340620ab8513
 [Waveshare Eth/RS485 User manual]: https://files.waveshare.com/upload/4/4d/RS485-to-eth-b-user-manual-EN-v1.33.pdf
 [Waveshare Eth/RS485 MQTT manual]: https://files.waveshare.com/upload/a/a6/EN-RS485-TO-ETH-B-MQTT-and-json-user-manual2.pdf
+[Vircom]: https://www.waveshare.com/wiki/File:VirCom_en.rar
 [IONinja]: https://ioninja.com/downloads.html
 [Online Modbus parser]: https://rapidscada.net/modbus/
 [Waveshare relays on Amazon]: https://www.amazon.com/dp/B0CLV4KNKX?psc=1&ref=ppx_yo2ov_dt_b_product_details
@@ -150,3 +457,4 @@ Experients described here were carried out with. I did experiments with:
 [pyserial]: https://pyserial.readthedocs.io/en/latest/shortintro.html
 [Hubitat Trend]: https://trends.google.com/trends/explore?date=all&geo=US&q=hubitat&hl=en-US
 [Home Assistant Trend]: https://trends.google.com/trends/explore?date=all&geo=US&q=%2Fg%2F11fzxlb_q4&hl=en-US
+[simple script]: https://github.com/thegridelectric/modbus-experiments/blob/main/mbe/script.py
