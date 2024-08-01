@@ -57,6 +57,7 @@ class MbeConfig(BaseModel):
     mode: Modes = Modes.serial
     serial: SerialConfig = SerialConfig()
     tcp: TCPConfig = TCPConfig()
+    serial_sniff: SerialConfig = SerialConfig()
 
     @property
     def path(self) -> Path:

@@ -37,9 +37,9 @@ def sniff(port: Optional[str] = None) -> None:
     """Sniff a serial port"""
     cfg = MbeConfig.load()
     if not port:
-        port = cfg.serial.port
-    elif port != cfg.serial.port:
-        cfg.serial.port = port
+        port = cfg.serial_sniff.port
+    elif port != cfg.serial_sniff.port:
+        cfg.serial_sniff.port = port
         cfg.save()
     with rs485.RS485(port) as ser:
         rich.print()
@@ -63,6 +63,7 @@ def config(
         Optional[bool], typer.Option(show_default=False, help="Set serial or tcp mode")
     ] = None,
     port: Optional[str] = None,
+    sniff_port: Optional[str] = None,
     host: Optional[str] = None,
     force: Annotated[
         bool, typer.Option(show_default=False, help="Force write of config.")
@@ -100,6 +101,9 @@ def config(
             update_config = True
     if port and port != cfg.serial.port:
         cfg.serial.port = port
+        update_config = True
+    if sniff_port and sniff_port != cfg.serial_sniff.port:
+        cfg.serial_sniff.port = sniff_port
         update_config = True
     if host and host != cfg.tcp.host:
         cfg.tcp.host = host
