@@ -390,14 +390,65 @@ co-exist on the bus:
    mbe run
    ```
 
+### IONinja sniffing
+
+There are time when it is preferable to sniff the RS495 bus directly, for
+example because the client does not or cannot communicate ModbusTCP. A
+[trivial serial program] such as `mbe sniff` can do this, but it does not 
+provide useful parsing. [IONinja] is program that parses Modbus serial
+communication and provides a nice visual display [similar to Wireshark].
+IONinja is not free but it has a free eval and a [reasonable subscription price]
+(note there is also one time $35 cost for the serial plugin when upgrading the
+eval).
+
+To set up IONinja: 
+
+1. [Download][IONinja] and install IONinja.
+2. Create a free account on IONinja.
+3. Sign up for the eval. 
+4. When you start IONinja, choose "Sign in online". 
+5. You might need to follow instructions to enter the key for the eval.
+
+Sniffing:
+
+1. Start IONinja
+2. File / New Session / Serial
+3. File / Layer Pipeline / Add / Modbus Analyzer
+4. Choose a serial port
+5. Set:
+   * Baud rate: 9600
+   * DTR: off
+   * Protocol: ModbusRTU
+   * Streams: Half duplex RX
+6. Session / Open (*you must do this each time*)
+
+To generate experimental traffic:
+
+1. Verify `mbe` is configured to communicat using a different mechanism:
+   ```shell
+   mbe config
+   # Check that "mode" and "serial" or "tcp" are as you desire.
+   ```
+2. If necessary configure `mbe` to communicate on a *different* serial port or on 
+  a ModbusTCP gateway. For example: 
+   ```shell
+   # To enable serial on port /dev/tty.usbserial-B001K2B8:
+   mbe config --serial --port /dev/tty.usbserial-B001K2B8
+   # Or, to enable tcp on host 192.168.1.210:
+   mbe config --no-serial --host 192.168.1.210
+   ```
+3. Generate a simple request / response with: 
+   ```shell
+   mbe tai read 
+   ```
+
+You should be able to click on the '+' icon in each row to get a detailed
+parsing of that packet.
+
 
 ## <a name="sniffing-kit">Sniffing kit</a>
 
 [Wago connectors]: https://www.wago.com/us/c/wire-splicing-connectors?f=%3Afacet_product_Produkthauptfunktion_5200%3ASplicing%20Connector%20with%20Levers%3Afacet_product_Betaetigungsart_01_3901%3ALever&sort=relevance&pageSize=20
-[Wireshark]: https://www.wireshark.org/
-[Wireshark download]: https://www.wireshark.org/download.html
-[capture filters]: https://www.tcpdump.org/manpages/pcap-filter.7.html
-[display filters]: https://www.wireshark.org/docs/man-pages/wireshark-filter.html
 [Modbus Spec]: https://www.modbus.org/docs/Modbus_Application_Protocol_V1_1b3.pdf
 [Modbus TCP]: https://www.modbus.org/docs/Modbus_Messaging_Implementation_Guide_V1_0b.pdf
 [Modbus Function Codes]: https://ozeki.hu/p_5873-modbus-function-codes.html
@@ -411,7 +462,6 @@ co-exist on the bus:
 [Waveshare Eth/RS485 User manual]: https://files.waveshare.com/upload/4/4d/RS485-to-eth-b-user-manual-EN-v1.33.pdf
 [Waveshare Eth/RS485 MQTT manual]: https://files.waveshare.com/upload/a/a6/EN-RS485-TO-ETH-B-MQTT-and-json-user-manual2.pdf
 [Vircom]: https://www.waveshare.com/wiki/File:VirCom_en.rar
-[IONinja]: https://ioninja.com/downloads.html
 [Online Modbus parser]: https://rapidscada.net/modbus/
 [Waveshare relays on Amazon]: https://www.amazon.com/dp/B0CLV4KNKX?psc=1&ref=ppx_yo2ov_dt_b_product_details
 [Waveshare relays]: https://www.waveshare.com/wiki/Modbus_RTU_Relay
@@ -430,6 +480,14 @@ co-exist on the bus:
 [AdaFruit-Wires]: https://mm.digikey.com/Volume0/opasdata/d220001/medias/docus/2184/3111_Web.pdf
 [Zooz Z-Wave dongle]: https://www.amazon.com/Z-Wave-ZST39-Assistant-HomeSeer-Software/dp/B0BW171KP3
 [Port Mirroring]: https://en.wikipedia.org/wiki/Port_mirroring
+[Wireshark]: https://www.wireshark.org/
+[Wireshark download]: https://www.wireshark.org/download.html
+[capture filters]: https://www.tcpdump.org/manpages/pcap-filter.7.html
+[display filters]: https://www.wireshark.org/docs/man-pages/wireshark-filter.html
+[trivial serial program]: https://github.com/thegridelectric/modbus-experiments/blob/3804caaab36d0f452d0a36ccd7e2c9601ca01921/mbe/cli.py#L44
+[IONinja]: https://ioninja.com/downloads.html
+[similar to Wireshark]: https://www.youtube.com/watch?v=uwKJUWeOlnQ&t=82s
+[reasonable subscription price]: https://ioninja.com/account/subscription.html?utm_source=google&utm_medium=cpc&utm_campaign=pmax-hardware&gad_source=1&gclid=CjwKCAjw5Ky1BhAgEiwA5jGujiS1wZ8J_QWuI0HTwCcXfvvJgY1MDRsejMiI8eBDOY9SuAbGG7BA2RoCcp8QAvD_BwE
 [Serial Port Monitor]: https://www.com-port-monitoring.com/downloads.html
 [SerialTool]: https://www.serialtool.com/_en/serial-port-license
 [pyserial]: https://pyserial.readthedocs.io/en/latest/shortintro.html
