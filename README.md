@@ -445,6 +445,19 @@ To generate experimental traffic:
 You should be able to click on the '+' icon in each row to get a detailed
 parsing of that packet.
 
+### Port mirroring
+[Wireshark], but it can only show packets that your computer sees. If you trying
+to watch TCP communication between a ModbusTCP client and ModbusTCP gateway, 
+and the client is an actual other device, not software running on your computer,
+there is a good chance that the LAN hardware the client, the gateway and your
+computer will not present packets between the client and the gateway to your
+computer. This is primarily for efficiency reasons, but also for security. 
+
+This problem is solvable using a network switch that supports [Port Mirroring],
+assuming you can reconnect the Ethernet cable of at least one monitored device
+to the new swich, and connect the new switch to the existing LAN. 
+ 
+
 
 ## <a name="sniffing-kit">Sniffing kit</a>
 
@@ -476,10 +489,10 @@ parsing of that packet.
 [Port mirroring switch on amazon]: https://www.amazon.com/dp/B00M1C0186?psc=1&ref=ppx_yo2ov_dt_b_product_details
 [Port mirroring switch]: https://www.netgear.com/support/product/gs108ev3/
 [GS108ev3 manual]: https://www.downloads.netgear.com/files/GDC/GS105EV2/WebManagedSwitches_UM_EN.pdf
+[Port Mirroring]: https://en.wikipedia.org/wiki/Port_mirroring
 [Alitove]: https://www.amazon.com/ALITOVE-Transformer-Universal-Regulated-Switching/dp/B078RYWZMH/ref=sr_1_4?dib=eyJ2IjoiMSJ9.5igMaIazfkV-vmQFfpuzk11z5IOilxi7GusTD5PPRHU97Ow1K2fDhFemWyDKqGkbd5bRq7Zp2hHP1ej0IYU_gIXq98NCERmrkIpdWQVGP_T618vqhYMWJzWeu5trVSgaawG8Y0jdFhOdPzoz5idF2yP_nYkubNheqavr1mAMXFQKL97HCSeVs5C-Xo2gSeCt9nC1inwiIbDOF_KWTRhSaB8kbwaA-yIL6bT4_3LEqHk.dwGPrZ7_eyJxw7FFeStd7dL74WlOCCBm2ignLUM5E1c&dib_tag=se&keywords=power%2Bsupply%2B24v%2B10a&qid=1722015511&sr=8-4&th=1
 [AdaFruit-Wires]: https://mm.digikey.com/Volume0/opasdata/d220001/medias/docus/2184/3111_Web.pdf
 [Zooz Z-Wave dongle]: https://www.amazon.com/Z-Wave-ZST39-Assistant-HomeSeer-Software/dp/B0BW171KP3
-[Port Mirroring]: https://en.wikipedia.org/wiki/Port_mirroring
 [Wireshark]: https://www.wireshark.org/
 [Wireshark download]: https://www.wireshark.org/download.html
 [capture filters]: https://www.tcpdump.org/manpages/pcap-filter.7.html
