@@ -332,7 +332,7 @@ You can also filter by MAC address since you should be able to figure out the
 MAC address of the gateway. You might want to try pinging the device while the
 capture is running. 
 
-### Configuring multiple devices 
+### Configuring multiple devices
 If multiple servers are present on a Modbus bus, they must have different device
 IDs. Generally devices ship with a the same default ID (1), so you have to
 change their device IDs. How to change their device ID must be documented by the
@@ -455,11 +455,43 @@ computer. This is primarily for efficiency reasons, but also for security.
 
 This problem is solvable using a network switch that supports [Port Mirroring],
 assuming you can reconnect the Ethernet cable of at least one monitored device
-to the new swich, and connect the new switch to the existing LAN. 
- 
+to the new swich, and connect the new switch to the existing LAN. We verified
+this set up with a [GS108ev3][Port mirroring switch on amazon] from NetGear.
 
+To set up this sniffing Ethernet link 
+1. Connect the GS108ev3 to your LAN.
+2. Enable port mirroring on the switch per the [GS108ev3 manual]. Basically: 
+   * Determine the IP address of the switch by logging into your router or using
+     the [NetGear discovery tool]
+   * Log onto the switch using a browser.
+   * Change the switch password.
+   * Follow instruction in the manual to enable port mirroring to one of the
+     ports of the switch (I chose port 8). For efficiency and security only one
+     port receives the packets mirrored from other ports.
+3. Connect either or both of the client and the gateway to the GS1018ev3.
+4. Connect your sniffing computer to the port on the swich you configured to
+   receive mirrored packets.
 
 ## <a name="sniffing-kit">Sniffing kit</a>
+
+* [Power supply][Alitove]
+* [5 colors of 22 AWG stranded wire][AdaFruit-Wires]
+* Wire stripper
+* Screw drivers
+* [Wago connectors]
+* [Waveshare ModbusTCP gateway][Waveshare Eth/RS485 on Amazon] 
+* Two [Waveshare USB/RS485 dongles][Waveshare USB/RS485 on Amazon]
+* [USB-C/USB-A]
+* [USB-A extension cable]
+* [Port mirroring switch][Port mirroring switch on amazon]
+* [USB-C to Ethernet connector][Mokin USB-C/Eth]
+* 4 Ethernet cables
+* [Wireshark] software
+* [IONinja] software with eval license or subscription.
+* Test devices: 
+  * [Taidecent Thermometer]
+  * [Waveshare Relays]
+
 
 [Wago connectors]: https://www.wago.com/us/c/wire-splicing-connectors?f=%3Afacet_product_Produkthauptfunktion_5200%3ASplicing%20Connector%20with%20Levers%3Afacet_product_Betaetigungsart_01_3901%3ALever&sort=relevance&pageSize=20
 [Modbus Spec]: https://www.modbus.org/docs/Modbus_Application_Protocol_V1_1b3.pdf
@@ -490,6 +522,7 @@ to the new swich, and connect the new switch to the existing LAN.
 [Port mirroring switch]: https://www.netgear.com/support/product/gs108ev3/
 [GS108ev3 manual]: https://www.downloads.netgear.com/files/GDC/GS105EV2/WebManagedSwitches_UM_EN.pdf
 [Port Mirroring]: https://en.wikipedia.org/wiki/Port_mirroring
+[NetGear discovery tool]: https://www.netgear.com/support/product/netgear-discovery-tool/
 [Alitove]: https://www.amazon.com/ALITOVE-Transformer-Universal-Regulated-Switching/dp/B078RYWZMH/ref=sr_1_4?dib=eyJ2IjoiMSJ9.5igMaIazfkV-vmQFfpuzk11z5IOilxi7GusTD5PPRHU97Ow1K2fDhFemWyDKqGkbd5bRq7Zp2hHP1ej0IYU_gIXq98NCERmrkIpdWQVGP_T618vqhYMWJzWeu5trVSgaawG8Y0jdFhOdPzoz5idF2yP_nYkubNheqavr1mAMXFQKL97HCSeVs5C-Xo2gSeCt9nC1inwiIbDOF_KWTRhSaB8kbwaA-yIL6bT4_3LEqHk.dwGPrZ7_eyJxw7FFeStd7dL74WlOCCBm2ignLUM5E1c&dib_tag=se&keywords=power%2Bsupply%2B24v%2B10a&qid=1722015511&sr=8-4&th=1
 [AdaFruit-Wires]: https://mm.digikey.com/Volume0/opasdata/d220001/medias/docus/2184/3111_Web.pdf
 [Zooz Z-Wave dongle]: https://www.amazon.com/Z-Wave-ZST39-Assistant-HomeSeer-Software/dp/B0BW171KP3
