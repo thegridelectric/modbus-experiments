@@ -289,8 +289,7 @@ filter languages:
   capture filters when you start capturing. They can reduce the size of captured
   data. 
 * [Display filters] control which packets are displayed during capture. They can
-  be changed during capture. 
-* 
+  be changed during capture.
 
 If you don't expect IP connection issues, a capture filter will reduce clutter.
 On the other hand, if you are having trouble connecting, it might be better to
