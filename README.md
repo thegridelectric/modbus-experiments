@@ -99,6 +99,7 @@ from the Taidecent thermometer.
    USB-C/USB-A cable to your macintosh. 
 4. Clone this repo, Create virtual environment, activate it, and install the
    prequisites.
+   
     ```shell
     git clone https://github.com/thegridelectric/modbus-experiments.git
     cd modbus-experiments
@@ -109,7 +110,7 @@ from the Taidecent thermometer.
     This will install [pymodbus], [pyserial], a [simple script], a cli for
     more involved experiments (`mbe`) and development tools. To just run the 
     simple script all you would need to do is: 
-    
+   
     ```shell
     git clone https://github.com/thegridelectric/modbus-experiments.git
     cd modbus-experiments
@@ -225,7 +226,7 @@ bus. You can do that with a second [USB serial dongle][Waveshare USB/RS485]:
    or [IONinja]. Wireshark is free, so we will start with that. To watch Modbus
    with Wireshark, we need to set up the
    [Waveshare ModbusTCP gateway][Waveshare Eth/RS485 User manual].
-  
+
 
 ### <a name="waveshare-gateway">Waveshare gateway</a>
 
@@ -429,7 +430,7 @@ To generate experimental traffic:
    # Check that "mode" and "serial" or "tcp" are as you desire.
    ```
 2. If necessary configure `mbe` to communicate on a *different* serial port or on 
-  a ModbusTCP gateway. For example: 
+    a ModbusTCP gateway. For example: 
    ```shell
    # To enable serial on port /dev/tty.usbserial-B001K2B8:
    mbe config --serial --port /dev/tty.usbserial-B001K2B8
@@ -491,14 +492,23 @@ To set up this sniffing Ethernet link
   * [Taidecent Thermometer]
   * [Waveshare Relays]
 
+[links]: .
 
+[bus hardware]: .
 [Wago connectors]: https://www.wago.com/us/c/wire-splicing-connectors?f=%3Afacet_product_Produkthauptfunktion_5200%3ASplicing%20Connector%20with%20Levers%3Afacet_product_Betaetigungsart_01_3901%3ALever&sort=relevance&pageSize=20
+[Alitove]: https://www.amazon.com/ALITOVE-Transformer-Universal-Regulated-Switching/dp/B078RYWZMH/ref=sr_1_4?dib=eyJ2IjoiMSJ9.5igMaIazfkV-vmQFfpuzk11z5IOilxi7GusTD5PPRHU97Ow1K2fDhFemWyDKqGkbd5bRq7Zp2hHP1ej0IYU_gIXq98NCERmrkIpdWQVGP_T618vqhYMWJzWeu5trVSgaawG8Y0jdFhOdPzoz5idF2yP_nYkubNheqavr1mAMXFQKL97HCSeVs5C-Xo2gSeCt9nC1inwiIbDOF_KWTRhSaB8kbwaA-yIL6bT4_3LEqHk.dwGPrZ7_eyJxw7FFeStd7dL74WlOCCBm2ignLUM5E1c&dib_tag=se&keywords=power%2Bsupply%2B24v%2B10a&qid=1722015511&sr=8-4&th=1
+[AdaFruit-Wires]: https://mm.digikey.com/Volume0/opasdata/d220001/medias/docus/2184/3111_Web.pdf
+
+[modbus]: .
 [Modbus Spec]: https://www.modbus.org/docs/Modbus_Application_Protocol_V1_1b3.pdf
 [Modbus TCP]: https://www.modbus.org/docs/Modbus_Messaging_Implementation_Guide_V1_0b.pdf
-[Modbus Function Codes]: https://ozeki.hu/p_5873-modbus-function-codes.html
+
+[pymodbus]: .
 [pymodbus]: https://pymodbus.readthedocs.io/en/latest/source/simulator.html
 [pymodbus parser example]: https://github.com/pymodbus-dev/pymodbus/blob/master/examples/message_parser.py
 [pymodbus generator example]: https://github.com/pymodbus-dev/pymodbus/blob/master/examples/message_generator.py
+
+[waveshare gateway]: .
 [Waveshare Eth/RS485]: https://www.waveshare.com/wiki/RS485_TO_ETH_(B)
 [Waveshare Eth/RS485 POE]: https://www.waveshare.com/wiki/RS485_TO_POE_ETH_(B)
 [Rod McBain]: https://www.youtube.com/watch?v=Xuj2YFZ5zME&t=413s
@@ -506,36 +516,42 @@ To set up this sniffing Ethernet link
 [Waveshare Eth/RS485 User manual]: https://files.waveshare.com/upload/4/4d/RS485-to-eth-b-user-manual-EN-v1.33.pdf
 [Waveshare Eth/RS485 MQTT manual]: https://files.waveshare.com/upload/a/a6/EN-RS485-TO-ETH-B-MQTT-and-json-user-manual2.pdf
 [Vircom]: https://www.waveshare.com/wiki/File:VirCom_en.rar
-[Online Modbus parser]: https://rapidscada.net/modbus/
+
+[test devies]: .
 [Waveshare relays on Amazon]: https://www.amazon.com/dp/B0CLV4KNKX?psc=1&ref=ppx_yo2ov_dt_b_product_details
 [Waveshare relays]: https://www.waveshare.com/wiki/Modbus_RTU_Relay
+[Taidecent thermometer]: https://www.amazon.com/dp/B07ZYVZZKK?psc=1&ref=ppx_yo2ov_dt_b_product_details
+
+[usb/rs485]: .
 [Waveshare USB/RS485 on Amazon]: https://www.amazon.com/gp/aw/d/B081NBCJRS/?_encoding=UTF8&pd_rd_plhdr=t&aaxitk=3b189f989dddebde3c804d6a7e36be6e&hsa_cr_id=0&qid=1722013232&sr=1-2-9e67e56a-6f64-441f-a281-df67fc737124&ref_=sbx_be_s_sparkle_sccd_asin_1_img&pd_rd_w=tGxX7&content-id=amzn1.sym.8591358d-1345-4efd-9d50-5bd4e69cd942%3Aamzn1.sym.8591358d-1345-4efd-9d50-5bd4e69cd942&pf_rd_p=8591358d-1345-4efd-9d50-5bd4e69cd942&pf_rd_r=DFBYFKQQZNWPBGN8AYEK&pd_rd_wg=bdGhC&pd_rd_r=26852b6b-31ae-4eb5-8ddf-4be5cb91a90e
 [Waveshare USB/RS485]: https://www.waveshare.com/wiki/USB_TO_RS485
-[Taidecent thermometer]: https://www.amazon.com/dp/B07ZYVZZKK?psc=1&ref=ppx_yo2ov_dt_b_product_details
-[Stride MQTT/Modbus gateway]: https://www.automationdirect.com/adc/overview/catalog/communications/industrial_iot_solutions/mqtt_gateways?gad_source=1&gclid=Cj0KCQjwv7O0BhDwARIsAC0sjWOFsqDI15TGkvbkFKIGhMCeQjELYF7IWXI_HFQ4OxPRbsqn6WhabsIaAhK4EALw_wcB#bodycontentppc
-[Stride MQTT/Modbus gateway user manual]: https://cdn.automationdirect.com/static/manuals/mqttgateway/sgwmq1611userm.pdf
 [USB-C/USB-A]: https://www.amazon.com/dp/B07TPS44SL?psc=1&ref=ppx_yo2ov_dt_b_product_details
 [USB-A extension cable]: https://www.amazon.com/Extension-AINOPE-Material-Transfer-Compatible/dp/B07ZV6FHWF/ref=sr_1_4?crid=1K4IZ13NTV8O5&dib=eyJ2IjoiMSJ9.D0CvjxSS7KAqyLV1bV1Vpnwv8HUOg95mrDFi8zBrA9mrHl6xZ8G4QZbswPhSm2HONCB3jcAvQ58bxNyfNroCbsnVaIxV6mmbiQHpZu-nuq807PBXfVBa3KawoYtHYXojpzSly6eg5Rv8tjLmnxFa8VvYADi98qIKLHGbLVoJPVAta1VUiemkusVvLdiDdv5prMliPjWsA32tjmv7pWiRXsBQUTetJAPff33Fj-aods8.0aozzyW_uv_25zmInNW6NzFD_JZ7wpclNcEGPBtXEgo&dib_tag=se&keywords=usb%2Ba%2Bextension%2Bcable&qid=1722119822&sprefix=usb%2Ba%2Bexte%2Caps%2C90&sr=8-4&th=1
+
+[Port Mirroring stuff]: .
 [Mokin USB-C/Eth]: https://www.amazon.com/Adapter-MacBook-MOKiN-Ethernet-Charging/dp/B07S8MKJ6Q/ref=sr_1_1?crid=BXDQ4XH33GL4&dib=eyJ2IjoiMSJ9.X1DLChZXvZ24YjkLM31TQwZ52LgwzHNTjbh-j4M5SA8tdY4jB4Vjx8q16Rt-PxjK1P-G2Y6bnz3gd7bQdlWN084Y8ERLYhomGBNq0sxIV5RXwotxMJ8lPHTFEHt76xJjYSUGXB4wz_faceFE0QGmwwu2ePKvMpmH4prMoTaion0LpczreikrVXhs3oibQ8FrYu5bHydO37GpU6NqiujT-PvcD0Y1RwfmgcAYL4ydTQShcbX0K-j90eFWYvoZ_V-rsqdu1pUqVh-_jZtVi7I-Dms2RPj6btHFn7FVGz89WNA.FWtg0dIeiggE2y_2TESxI30J_Z06pfCKGgsEYGV25mA&dib_tag=se&keywords=mokin+usb+c+ethernet&qid=1722014640&s=electronics&sprefix=mokin+usb+c+ethernet%2Celectronics%2C77&sr=1-1
 [Port mirroring switch on amazon]: https://www.amazon.com/dp/B00M1C0186?psc=1&ref=ppx_yo2ov_dt_b_product_details
 [Port mirroring switch]: https://www.netgear.com/support/product/gs108ev3/
 [GS108ev3 manual]: https://www.downloads.netgear.com/files/GDC/GS105EV2/WebManagedSwitches_UM_EN.pdf
 [Port Mirroring]: https://en.wikipedia.org/wiki/Port_mirroring
 [NetGear discovery tool]: https://www.netgear.com/support/product/netgear-discovery-tool/
-[Alitove]: https://www.amazon.com/ALITOVE-Transformer-Universal-Regulated-Switching/dp/B078RYWZMH/ref=sr_1_4?dib=eyJ2IjoiMSJ9.5igMaIazfkV-vmQFfpuzk11z5IOilxi7GusTD5PPRHU97Ow1K2fDhFemWyDKqGkbd5bRq7Zp2hHP1ej0IYU_gIXq98NCERmrkIpdWQVGP_T618vqhYMWJzWeu5trVSgaawG8Y0jdFhOdPzoz5idF2yP_nYkubNheqavr1mAMXFQKL97HCSeVs5C-Xo2gSeCt9nC1inwiIbDOF_KWTRhSaB8kbwaA-yIL6bT4_3LEqHk.dwGPrZ7_eyJxw7FFeStd7dL74WlOCCBm2ignLUM5E1c&dib_tag=se&keywords=power%2Bsupply%2B24v%2B10a&qid=1722015511&sr=8-4&th=1
-[AdaFruit-Wires]: https://mm.digikey.com/Volume0/opasdata/d220001/medias/docus/2184/3111_Web.pdf
-[Zooz Z-Wave dongle]: https://www.amazon.com/Z-Wave-ZST39-Assistant-HomeSeer-Software/dp/B0BW171KP3
+
+[wireshark stuff]: .
 [Wireshark]: https://www.wireshark.org/
 [Wireshark download]: https://www.wireshark.org/download.html
 [capture filters]: https://www.tcpdump.org/manpages/pcap-filter.7.html
 [display filters]: https://www.wireshark.org/docs/man-pages/wireshark-filter.html
+
+[IONinja and friends]: .
+[pyserial]: https://pyserial.readthedocs.io/en/latest/shortintro.html
 [trivial serial program]: https://github.com/thegridelectric/modbus-experiments/blob/3804caaab36d0f452d0a36ccd7e2c9601ca01921/mbe/cli.py#L44
 [IONinja]: https://ioninja.com/downloads.html
 [similar to Wireshark]: https://www.youtube.com/watch?v=uwKJUWeOlnQ&t=82s
 [reasonable subscription price]: https://ioninja.com/account/subscription.html?utm_source=google&utm_medium=cpc&utm_campaign=pmax-hardware&gad_source=1&gclid=CjwKCAjw5Ky1BhAgEiwA5jGujiS1wZ8J_QWuI0HTwCcXfvvJgY1MDRsejMiI8eBDOY9SuAbGG7BA2RoCcp8QAvD_BwE
 [Serial Port Monitor]: https://www.com-port-monitoring.com/downloads.html
 [SerialTool]: https://www.serialtool.com/_en/serial-port-license
-[pyserial]: https://pyserial.readthedocs.io/en/latest/shortintro.html
-[Hubitat Trend]: https://trends.google.com/trends/explore?date=all&geo=US&q=hubitat&hl=en-US
-[Home Assistant Trend]: https://trends.google.com/trends/explore?date=all&geo=US&q=%2Fg%2F11fzxlb_q4&hl=en-US
+
+[misc]: .
 [simple script]: https://github.com/thegridelectric/modbus-experiments/blob/main/mbe/script.py
+[Online Modbus parser]: https://rapidscada.net/modbus/
+[Modbus Function Codes]: https://ozeki.hu/p_5873-modbus-function-codes.html
