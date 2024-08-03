@@ -15,20 +15,26 @@ Hubitat does support:
 * [MQTT]
 
 We therefore need a "bridge" to convert between one of Hubitat's well-supported
-interfaces and Modbus.
+interfaces and Modbus. We selected [Home Assistant] as a bridge.
 
-## Bridges
+We were able to confirm that:
+* Hubitat can communicate with Home Assistant
+* Home Assistant can communicate with Modbus devices over serial and Modbus TCP.
+* Home Assistant can communicate with Z-Wave devices using a USB dongle.
+* Modbus and Z-Wave devices can interact with Hubitat Rules via the Home 
+  Assistant.
 
-We selected [Home Assistant] as a bridge.
+We were also able to:
+* Quickly write an HTTP/Modbus bridge prototype and control Modbus devices from 
+  HTTP. 
+* Quickly set up Node-Red as an MQTT/Modbus bridge and control Modbus devices
+  from MQTT.
 
-### Home Assistant
-  
-    Hubitat <-> websockets <-> Home Assistant <-> serial dongle <-> RS485 Modbus
+# Home Assistant
 
+# Rejected bridge options 
 
-### Rejected options 
-
-####  Waveshare gateway MQTT
+##  Waveshare gateway MQTT
 
 Don't do this.
 
@@ -38,18 +44,49 @@ stopped working as a ModbusTCP gateway and it took more hours to reset. The
 manual is hard to understand and tech support thought the problem was my MQTT
 broker (it is not).
 
-#### Hand-written HTTP/Modbus bridge
-We could write an HTTP / Modbus bridge in python and run that on a Pi. This was
-rejected because it would require maintenance time and require a separate Pi
-running in the system. 
+## Hand-written HTTP/Modbus bridge
+We could write an HTTP / Modbus bridge in python and run that on a Pi. This is
+attractive because HTTP interaction is even more widely available than MQTT. We
+rejected this because it would require maintenance time and a separate Pi
+running in the system. Experiment at `$HOME/git/modbus-http` on Andy's machine.
 
-#### Node-Red
+## Node-Red
 [Node-Red] is a [NodeJs] server for connecting devices with a graphical
 interface. We got it working such that it could receive commands on MQTT and
 use to those to interact with Modbus devices. We rejected this because it would
-require a separate Pi to run Node-Red.
+require a separate Pi to run Node-Red. Home Assistant can run Node-Red as an 
+"add-on" (in a separate container). 
 
-#### Stride MQTT Gateway
+Node-Red install, from [Node-Red getting started]:
+
+* Update nvm:
+
+      wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+    
+* Update node: 
+
+      nvm install node
+      nvm use NODE-VERSION-YOU-INSTALLED
+      nvm alias default node
+
+* Install node-red:
+    
+      sudo npm install -g --unsafe-perm node-red
+
+* Instal [node-red-contrib-modbus]:
+     
+      npm install node-red-contrib-modbus
+
+* Run node-red
+  
+      node-red
+     
+* Access browser at http://127.0.0.1:1880/
+
+We used flows found in [node-red-flows.json](./node-red-flows.json). The flow
+used "mqtt in", "mqtt out", "modbus-flex-getter" and "modbus-flex-write" nodes.
+
+## Stride MQTT Gateway
 Stride sells an [MQTT/Modbus gateway]. We rejected this because it would require
 a Pi to run an MQTT broker. 
 
@@ -57,7 +94,7 @@ a Pi to run an MQTT broker.
 For Z-Wave with Home Assistant
 * [Zooz Z-Wave dongle]
 
-### Test devices
+## Test devices
 It is useful to have a cheap and simple Z-Wave device to experiment with. Any
 selection is fine as long as read and write functionality (e.g. read temperature
 and set relay state) is supported. A Fibaro Smart Implant is probably
@@ -125,6 +162,8 @@ These are options:
 [Node-Red stuff]: . 
 [Node-Red]: https://nodered.org/
 [NodeJs]: https://nodejs.org/en
+[Node-Red getting started]: https://nodered.org/docs/getting-started/local
+[node-red-contrib-modbus]: https://flows.nodered.org/node/node-red-contrib-modbus
 
 [gateways]: .
 [Hubitat Trend]: https://trends.google.com/trends/explore?date=all&geo=US&q=hubitat&hl=en-US

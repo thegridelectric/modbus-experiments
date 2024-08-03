@@ -1,0 +1,311 @@
+[
+    {
+        "id": "3fd345543b33cf35",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "577935ecd51d7352",
+        "type": "modbus-flex-getter",
+        "z": "3fd345543b33cf35",
+        "name": "modbus GET /dev/tty.usbserial-B001K6G3",
+        "showStatusActivities": true,
+        "showErrors": true,
+        "showWarnings": true,
+        "logIOActivities": false,
+        "server": "c5e441cdf2744fef",
+        "useIOFile": false,
+        "ioFile": "",
+        "useIOForPayload": false,
+        "emptyMsgOnFail": false,
+        "keepMsgProperties": true,
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "x": 370,
+        "y": 80,
+        "wires": [
+            [
+                "df510c73c6dce474"
+            ],
+            [
+                "21a7d0aeb2b8422e"
+            ]
+        ]
+    },
+    {
+        "id": "9e5665bea0db65d5",
+        "type": "mqtt in",
+        "z": "3fd345543b33cf35",
+        "name": "",
+        "topic": "nr/+/get/req",
+        "qos": "0",
+        "datatype": "auto-detect",
+        "broker": "ea0062f348128330",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 90,
+        "y": 80,
+        "wires": [
+            [
+                "577935ecd51d7352"
+            ]
+        ]
+    },
+    {
+        "id": "ce25596ba6acbd86",
+        "type": "mqtt out",
+        "z": "3fd345543b33cf35",
+        "name": "nr/+/get/resp",
+        "topic": "",
+        "qos": "0",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "ea0062f348128330",
+        "x": 930,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "2b1957830942c81f",
+        "type": "modbus-flex-write",
+        "z": "3fd345543b33cf35",
+        "name": "modbus SET /dev/tty.usbserial-B001K6G3",
+        "showStatusActivities": true,
+        "showErrors": true,
+        "showWarnings": true,
+        "server": "c5e441cdf2744fef",
+        "emptyMsgOnFail": true,
+        "keepMsgProperties": true,
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "x": 370,
+        "y": 220,
+        "wires": [
+            [
+                "fd6983c8c03941a2"
+            ],
+            [
+                "169cadf5cf21efd4"
+            ]
+        ]
+    },
+    {
+        "id": "df2dd08e7dd5b746",
+        "type": "mqtt in",
+        "z": "3fd345543b33cf35",
+        "name": "",
+        "topic": "nr/+/set/req",
+        "qos": "0",
+        "datatype": "auto-detect",
+        "broker": "ea0062f348128330",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 90,
+        "y": 220,
+        "wires": [
+            [
+                "2b1957830942c81f"
+            ]
+        ]
+    },
+    {
+        "id": "ae6dd7d935e8776b",
+        "type": "mqtt out",
+        "z": "3fd345543b33cf35",
+        "name": "nr/+/set/resp",
+        "topic": "",
+        "qos": "0",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "ea0062f348128330",
+        "x": 930,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "df510c73c6dce474",
+        "type": "debug",
+        "z": "3fd345543b33cf35",
+        "name": "MQTT-RCV-get",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 660,
+        "y": 20,
+        "wires": []
+    },
+    {
+        "id": "fd6983c8c03941a2",
+        "type": "debug",
+        "z": "3fd345543b33cf35",
+        "name": "MQTT-RCV-set",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 660,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "21a7d0aeb2b8422e",
+        "type": "function",
+        "z": "3fd345543b33cf35",
+        "name": "REQ-to-RESP-get",
+        "func": "msg.topic = msg._topic.replace(\"/req\", \"/resp\")\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 710,
+        "y": 80,
+        "wires": [
+            [
+                "ce25596ba6acbd86",
+                "93aee7a60a2ae6d0"
+            ]
+        ]
+    },
+    {
+        "id": "93aee7a60a2ae6d0",
+        "type": "debug",
+        "z": "3fd345543b33cf35",
+        "name": "MQTT-PUB-get",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 920,
+        "y": 20,
+        "wires": []
+    },
+    {
+        "id": "169cadf5cf21efd4",
+        "type": "function",
+        "z": "3fd345543b33cf35",
+        "name": "REQ-to-RESP-set",
+        "func": "msg.topic = msg._topic.replace(\"/req\", \"/resp\")\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 690,
+        "y": 220,
+        "wires": [
+            [
+                "ae6dd7d935e8776b",
+                "1c7dc7238e523f76"
+            ]
+        ]
+    },
+    {
+        "id": "1c7dc7238e523f76",
+        "type": "debug",
+        "z": "3fd345543b33cf35",
+        "name": "MQTT-PUB-set",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 940,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "c5e441cdf2744fef",
+        "type": "modbus-client",
+        "name": "modbus /dev/tty.usbserial-B001K6G3",
+        "clienttype": "simpleser",
+        "bufferCommands": true,
+        "stateLogEnabled": false,
+        "queueLogEnabled": false,
+        "failureLogEnabled": true,
+        "tcpHost": "127.0.0.1",
+        "tcpPort": "502",
+        "tcpType": "DEFAULT",
+        "serialPort": "/dev/tty.usbserial-B001K6G3",
+        "serialType": "RTU",
+        "serialBaudrate": "9600",
+        "serialDatabits": "8",
+        "serialStopbits": "1",
+        "serialParity": "none",
+        "serialConnectionDelay": "100",
+        "serialAsciiResponseStartDelimiter": "0x3A",
+        "unit_id": 0,
+        "commandDelay": 1,
+        "clientTimeout": 1000,
+        "reconnectOnTimeout": true,
+        "reconnectTimeout": 2000,
+        "parallelUnitIdsAllowed": true,
+        "showErrors": false,
+        "showWarnings": true,
+        "showLogs": true
+    },
+    {
+        "id": "ea0062f348128330",
+        "type": "mqtt-broker",
+        "name": "losthost-mqtt",
+        "broker": "localhost",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    }
+]
