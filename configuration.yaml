@@ -1,0 +1,76 @@
+
+# Loads default set of integrations. Do not remove.
+default_config:
+
+# Load frontend themes from the themes folder
+frontend:
+  themes: !include_dir_merge_named themes
+
+automation: !include automations.yaml
+script: !include scripts.yaml
+scene: !include scenes.yaml
+
+logger:
+  default: warn
+  logs:
+    homeassistant.components.modbus: warn
+    pymodbus: warn
+
+modbus:
+#   - name: Waveshare
+#     type: tcp
+#     host: 192.168.1.210
+#     port: 502
+#     delay: 2
+  - name: usb_serial
+    type: serial
+    port: /dev/ttyUSB0
+    baudrate: 9600
+    bytesize: 8
+    method: rtu
+    parity: N
+    stopbits: 1
+    delay: 2
+    sensors:
+      - name: "Taidecent Thermometer"
+        unique_id: "Taidecent Thermometer"
+        device_address: 2
+        address: 0
+        input_type: holding
+        data_type: int16
+        scale: 0.018
+        offset: 32
+        unit_of_measurement: °F
+      - name: "Taidecent Humidity"
+        unique_id:  "Taidecent Humidity"
+        device_address: 2
+        address: 1
+        input_type: holding
+        data_type: int16
+        scale: 0.01
+        state_class: measurement
+        unit_of_measurement: "%"
+    switches:
+      - name: "Waveshare relay 0"
+        unique_id: "Waveshare relay 0"
+        device_address: 3
+        address: 0
+        write_type: coil
+        command_on: 0xFF00
+        command_off: 0
+    lights:
+      - name: "Light_1"
+        unique_id: "Light 1"
+        address: 0
+        write_type: coil
+        device_address: 3
+      - name: "Light_2"
+        unique_id: "Light 2"
+        address: 1
+        write_type: coil
+        device_address: 3
+      - name: "Light_3"
+        unique_id: "Light 3"
+        address: 2
+        write_type: coil
+        device_address: 3

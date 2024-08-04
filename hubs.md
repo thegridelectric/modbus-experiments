@@ -32,23 +32,65 @@ We were also able to:
 
 # Home Assistant
 
+We use:
+* a Raspberry Pi 4 
+* 32MB SD card
+* [Home Assistant operating system]
+
+Clarity note - in Home Assistant:
+* An "[add-on]" is a separate docker container that Home Assistant allows you to
+  install. 
+* An "[integration]" is a piece of code running, one way or another, *within*
+  Home Assistant.
+
+
+## Setup
+
+* Follow the [Raspberry Pi installation instructions].   
+* Follow the [onboarding page]
+* Set up access to configuration.yaml: 
+  * Install the [File Editor] add-on.
+  * Follow [configuration.yaml] instructions and verify you can edit the main
+    Home Assistant configuration.
+
+See below for Modbus and Z-Wave instructions.
+
+## Modbus
+...
+* [Modbus integration]
+* [example configuration.yaml](./configuration.yaml)
+
+## Z-Wave
+...
+[Z-Wave add-on]
+
+Alternative: https://github.com/hassio-addons/addon-zwave-js-ui/tree/main
+
+### Devices
+
+* [Zooz Z-Wave dongle]
+
+#### Test devices
+It is useful to have a cheap and simple Z-Wave device to experiment with. Any
+selection is fine as long as read and write functionality (e.g. read temperature
+and set relay state) is supported. A Fibaro Smart Implant is probably
+sufficient, though I did my testing with Zooz and Heltun devices. 
+
+These are options:
+* [Fibaro Smart Implant]
+* [Zooz Thermometer]
+* [Zooz Motion Sensor]
+* [Zooz Smart Plug]
+* [Zooz Relays]
+* [Heltun Quinto relays]
+
+## Hubitat connection
+
+## Relevant known issues
+* Security
+* Non-trivial modbus interactions
+
 # Rejected bridge options 
-
-##  Waveshare gateway MQTT
-
-Don't do this.
-
-The [Waveshare Modbus gateway] claims to [support MQTT], but after several hours
-of work, I was only able to make it exchange a MQTT messages, the gateway
-stopped working as a ModbusTCP gateway and it took more hours to reset. The
-manual is hard to understand and tech support thought the problem was my MQTT
-broker (it is not).
-
-## Hand-written HTTP/Modbus bridge
-We could write an HTTP / Modbus bridge in python and run that on a Pi. This is
-attractive because HTTP interaction is even more widely available than MQTT. We
-rejected this because it would require maintenance time and a separate Pi
-running in the system. Experiment at `$HOME/git/modbus-http` on Andy's machine.
 
 ## Node-Red
 [Node-Red] is a [NodeJs] server for connecting devices with a graphical
@@ -86,30 +128,52 @@ Node-Red install, from [Node-Red getting started]:
 We used flows found in [node-red-flows.json](./node-red-flows.json). The flow
 used "mqtt in", "mqtt out", "modbus-flex-getter" and "modbus-flex-write" nodes.
 
+## Hand-written HTTP/Modbus bridge
+We could write an HTTP / Modbus bridge in python and run that on a Pi. This is
+attractive because HTTP interaction is even more widely available than MQTT. We
+rejected this because it would require maintenance time and a separate Pi
+running in the system. Experiment at `$HOME/git/modbus-http` on Andy's machine.
+
+##  Waveshare gateway MQTT
+
+Don't do this.
+
+The [Waveshare Modbus gateway] claims to [support MQTT], but after several hours
+of work, I was only able to make it exchange a MQTT messages, the gateway
+stopped working as a ModbusTCP gateway and it took more hours to reset. The
+manual is hard to understand and tech support thought the problem was my MQTT
+broker (it is not).
+
 ## Stride MQTT Gateway
 Stride sells an [MQTT/Modbus gateway]. We rejected this because it would require
-a Pi to run an MQTT broker. 
-
-# Z-Wave devices
-For Z-Wave with Home Assistant
-* [Zooz Z-Wave dongle]
-
-## Test devices
-It is useful to have a cheap and simple Z-Wave device to experiment with. Any
-selection is fine as long as read and write functionality (e.g. read temperature
-and set relay state) is supported. A Fibaro Smart Implant is probably
-sufficient, though I did my testing with Zooz and Heltun devices. 
-
-These are options:
-* [Fibaro Smart Implant]
-* [Zooz Thermometer]
-* [Zooz Motion Sensor]
-* [Zooz Smart Plug]
-* [Zooz Relays]
-* [Heltun Quinto relays]
-
+a Pi to run an MQTT broker.
 
 [links]: .
+
+[Home Assistant stuff]: .
+[Home Assistant]: https://www.home-assistant.io/installation/ 
+[Home Assistant Modbus]: https://www.home-assistant.io/integrations/modbus/
+[Raspberry Pi installation instructions]: https://www.home-assistant.io/installation/raspberryp
+[onboarding page]: https://www.home-assistant.io/getting-started/onboarding/
+[Home Assistant operating system]: https://www.home-assistant.io/blog/2017/07/25/introducing-hassio/
+[integration]: https://www.home-assistant.io/integrations/
+[MQTT broker add-on]: https://www.home-assistant.io/integrations/mqtt/
+[add-on]: https://www.home-assistant.io/addons/
+[Modbus integration]: https://www.home-assistant.io/integrations/modbus/
+[configuration.yaml]: https://www.home-assistant.io/docs/configuration/
+[File Editor]: https://www.home-assistant.io/common-tasks/os/#installing-and-using-the-file-editor-add-on
+
+[Z-Wave]: . 
+[Z-Wave add-on]: https://www.home-assistant.io/integrations/zwave_js/
+[Z-Wave UI add-on]: https://github.com/hassio-addons/addon-zwave-js-ui
+[Zooz Z-Wave dongle]: https://www.amazon.com/Z-Wave-ZST39-Assistant-HomeSeer-Software/dp/B0BW171KP3
+[Zooz Thermometer]: https://www.thesmartesthouse.com/products/zooz-z-wave-plus-700-series-xs-temperature-humidity-sensor-zse44
+[Zooz Motion Sensor]: https://www.thesmartesthouse.com/products/zooz-z-wave-plus-motion-sensor-zse18-with-magnetic-base-battery-or-usb-power 
+[Zooz Smart Plug]: https://www.thesmartesthouse.com/collections/zooz/products/zooz-700-series-z-wave-plus-smart-plug-zen04
+[Zooz Relays]:vhttps://www.thesmartesthouse.com/products/zooz-z-wave-plus-700-series-universal-relay-zen17-with-2-no-nc-relays-20a-10a 
+[Heltun Quinto relays]: https://smartsd.ch/relay-switch-quinto-5x5a-heltun-he-rs01/
+[Fibaro Smart Implant]: https://www.amazon.com/FGBS-222-US-Implant-Universal-Required/dp/B07NDRCTJK/ref=sr_1_1?crid=545LHMSORHDL&dib=eyJ2IjoiMSJ9.o-_UOsPBQCx0NH75hDGl1DIfsRm7_PzmbsCDwzlZZYnIeGbFsnWOfZPoXQpUBFKzrPBFjIdwobWParZ86bzOxvvfKVm8e7cw9ygQbmRFnwOk3yOLWyqZqxg7UDhktPa-2FVtacwN_USo7whaHw21OuZ-rnaxjHGJBXQNY86MIHoFRJ8xUjq8iruDx3bt3vXv5ND5aZbDydGRpZlFqaLFTMSaW5aJnZYJYKarQrAOsWBBon5V-GT0rJQSvTECsKXDYywQLNqR97ZIjo8LhGsup6J5RUgzvq0_L4tvxC3Nav8.MICrIdSIatFOOi9Dko0POi3JgIcztlujunLW9OzZcR4&dib_tag=se&keywords=fibaro+smart+implant&qid=1722630324&sprefix=fibaro+smart%2Caps%2C96&sr=8-1
+
 
 [Hubitat stuff]: .
 [Hubitat]: https://hubitat.com/products?region=280262836267
@@ -140,24 +204,10 @@ These are options:
 [Waveshare Eth/RS485 MQTT]: https://files.waveshare.com/upload/a/a6/EN-RS485-TO-ETH-B-MQTT-and-json-user-manual2.pdf
 [Vircom]: https://www.waveshare.com/wiki/File:VirCom_en.rar
 
-[Z-wave]: . 
-[Zooz Z-Wave dongle]: https://www.amazon.com/Z-Wave-ZST39-Assistant-HomeSeer-Software/dp/B0BW171KP3
-[Zooz Thermometer]: https://www.thesmartesthouse.com/products/zooz-z-wave-plus-700-series-xs-temperature-humidity-sensor-zse44
-[Zooz Motion Sensor]: https://www.thesmartesthouse.com/products/zooz-z-wave-plus-motion-sensor-zse18-with-magnetic-base-battery-or-usb-power 
-[Zooz Smart Plug]: https://www.thesmartesthouse.com/collections/zooz/products/zooz-700-series-z-wave-plus-smart-plug-zen04
-[Zooz Relays]:vhttps://www.thesmartesthouse.com/products/zooz-z-wave-plus-700-series-universal-relay-zen17-with-2-no-nc-relays-20a-10a 
-[Heltun Quinto relays]: https://smartsd.ch/relay-switch-quinto-5x5a-heltun-he-rs01/
-[Fibaro Smart Implant]: https://www.amazon.com/FGBS-222-US-Implant-Universal-Required/dp/B07NDRCTJK/ref=sr_1_1?crid=545LHMSORHDL&dib=eyJ2IjoiMSJ9.o-_UOsPBQCx0NH75hDGl1DIfsRm7_PzmbsCDwzlZZYnIeGbFsnWOfZPoXQpUBFKzrPBFjIdwobWParZ86bzOxvvfKVm8e7cw9ygQbmRFnwOk3yOLWyqZqxg7UDhktPa-2FVtacwN_USo7whaHw21OuZ-rnaxjHGJBXQNY86MIHoFRJ8xUjq8iruDx3bt3vXv5ND5aZbDydGRpZlFqaLFTMSaW5aJnZYJYKarQrAOsWBBon5V-GT0rJQSvTECsKXDYywQLNqR97ZIjo8LhGsup6J5RUgzvq0_L4tvxC3Nav8.MICrIdSIatFOOi9Dko0POi3JgIcztlujunLW9OzZcR4&dib_tag=se&keywords=fibaro+smart+implant&qid=1722630324&sprefix=fibaro+smart%2Caps%2C96&sr=8-1
-
 [stride MQTT gateway]: .
 [MQTT/Modbus gateway]: https://www.automationdirect.com/adc/overview/catalog/communications/industrial_iot_solutions/mqtt_gateways?gad_source=1&gclid=Cj0KCQjwv7O0BhDwARIsAC0sjWOFsqDI15TGkvbkFKIGhMCeQjELYF7IWXI_HFQ4OxPRbsqn6WhabsIaAhK4EALw_wcB#bodycontentppc
 [Stride MQTT/Modbus gateway]: https://www.automationdirect.com/adc/overview/catalog/communications/industrial_iot_solutions/mqtt_gateways?gad_source=1&gclid=Cj0KCQjwv7O0BhDwARIsAC0sjWOFsqDI15TGkvbkFKIGhMCeQjELYF7IWXI_HFQ4OxPRbsqn6WhabsIaAhK4EALw_wcB#bodycontentppc
 [Stride MQTT/Modbus gateway user manual]: https://cdn.automationdirect.com/static/manuals/mqttgateway/sgwmq1611userm.pdf
-
-[Home Assistant stuff]: .
-[Home Assistant]: https://www.home-assistant.io/installation/ 
-[Home Assistant Modbus]: https://www.home-assistant.io/integrations/modbus/
-[Home Assistant Serial]: https://www.home-assistant.io/integrations/serial/
 
 [Node-Red stuff]: . 
 [Node-Red]: https://nodered.org/
