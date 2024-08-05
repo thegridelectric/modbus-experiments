@@ -20,7 +20,8 @@ interfaces and Modbus. We selected [Home Assistant] as a bridge.
 We were able to confirm that:
 * Hubitat can communicate with Home Assistant
 * Home Assistant can communicate with Modbus devices over serial and Modbus TCP.
-* Home Assistant can communicate with Z-Wave devices using a USB dongle.
+* Home Assistant can communicate with Z-Wave devices using a USB dongle. This is
+  critical because it gives us the option to eventually remove Hubitat entirely.
 * Modbus and Z-Wave devices can interact with Hubitat Rules via the Home 
   Assistant.
 
@@ -56,6 +57,10 @@ configure Home Assistant to use HTTPS so the password would be encrypted. See:
 * [YouTube video about securing Home Assistant] and probably
 * some googling. 
 
+To capture username/password in Wireshark use display filter: 
+  
+    http.request.uri contains "/auth/login_flow/"
+
 ## Setup
 
 * Follow the [Raspberry Pi installation instructions].   
@@ -84,22 +89,29 @@ actual read of the relay states. Additional custom config of some sort could
 what is required.
 
 ## Z-Wave
-...
-[Z-Wave add-on]
+With the [Zooz Z-Wave dongle] in hand, follow these instructions: [Z-Wave add-on].
 
-Alternative: https://github.com/hassio-addons/addon-zwave-js-ui/tree/main
+Then follow instructions to add test devices. The Zooz devices were very easy to
+attach. The Heltun Quinto Relays need to be configured to use the US Z-Wave
+frequencies. See [this post] for instructions for instructions on using the 
+Hubitat to change the Heltun's configuration.
 
-### Devices
+There is also a [Z-Wave UI add-on] which can apparently display info about your
+Z-Wave network. The underlying NodeJS server is apparently made by the same
+people. I tried the included Z-Wave add-on listed above. You must redo your
+config to switch.
 
+### Shopping lists
+
+Required:
 * [Zooz Z-Wave dongle]
 
-#### Test devices
 It is useful to have a cheap and simple Z-Wave device to experiment with. Any
 selection is fine as long as read and write functionality (e.g. read temperature
 and set relay state) is supported. A Fibaro Smart Implant is probably
 sufficient, though I did my testing with Zooz and Heltun devices. 
 
-These are options:
+These are options for test devices:
 * [Fibaro Smart Implant]
 * [Zooz Thermometer]
 * [Zooz Motion Sensor]
@@ -108,6 +120,17 @@ These are options:
 * [Heltun Quinto relays]
 
 ## Hubitat connection
+
+Hubitat can be configured to communicate with Home Assistant Z-Wave devices via
+a "community" code, "[HADB]". As the post describes, you install a driver and
+then an app for communicating with Hubitat, configure the IP address of the
+Home Assistant and then select which Home Assisstant devices you want to be
+reflected as Hubitat devices. 
+
+Note that after selecting a Home Assistant device in the HADB app, you must
+refresh that device before it appears in Hubitat's device list. 
+
+HADB uses Home Assistant's [Websocket API].
 
 # Rejected bridge options 
 
@@ -186,7 +209,7 @@ a Pi to run an MQTT broker.
 [securing Home Assistant]: https://www.home-assistant.io/docs/configuration/securing/
 [DuckDNS add-on]: https://www.home-assistant.io/integrations/duckdns/
 [YouTube video about securing Home Assistant]: https://www.youtube.com/watch?v=EQEpue7GhdI
-
+[Websocket API]: https://developers.home-assistant.io/docs/api/websocket/
 
 [Z-Wave]: . 
 [Z-Wave add-on]: https://www.home-assistant.io/integrations/zwave_js/
@@ -198,7 +221,7 @@ a Pi to run an MQTT broker.
 [Zooz Relays]:vhttps://www.thesmartesthouse.com/products/zooz-z-wave-plus-700-series-universal-relay-zen17-with-2-no-nc-relays-20a-10a 
 [Heltun Quinto relays]: https://smartsd.ch/relay-switch-quinto-5x5a-heltun-he-rs01/
 [Fibaro Smart Implant]: https://www.amazon.com/FGBS-222-US-Implant-Universal-Required/dp/B07NDRCTJK/ref=sr_1_1?crid=545LHMSORHDL&dib=eyJ2IjoiMSJ9.o-_UOsPBQCx0NH75hDGl1DIfsRm7_PzmbsCDwzlZZYnIeGbFsnWOfZPoXQpUBFKzrPBFjIdwobWParZ86bzOxvvfKVm8e7cw9ygQbmRFnwOk3yOLWyqZqxg7UDhktPa-2FVtacwN_USo7whaHw21OuZ-rnaxjHGJBXQNY86MIHoFRJ8xUjq8iruDx3bt3vXv5ND5aZbDydGRpZlFqaLFTMSaW5aJnZYJYKarQrAOsWBBon5V-GT0rJQSvTECsKXDYywQLNqR97ZIjo8LhGsup6J5RUgzvq0_L4tvxC3Nav8.MICrIdSIatFOOi9Dko0POi3JgIcztlujunLW9OzZcR4&dib_tag=se&keywords=fibaro+smart+implant&qid=1722630324&sprefix=fibaro+smart%2Caps%2C96&sr=8-1
-
+[this post]: https://community.hubitat.com/t/heltun-z-wave-quinto-relay-he-rs01/117749/6
 
 [Hubitat stuff]: .
 [Hubitat]: https://hubitat.com/products?region=280262836267
