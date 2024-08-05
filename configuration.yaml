@@ -58,6 +58,20 @@ modbus:
         write_type: coil
         command_on: 0xFF00
         command_off: 0
+      - name: "Waveshare relay 1"
+        unique_id: "Waveshare relay 1"
+        device_address: 3
+        address: 1
+        write_type: coil
+        command_on: 0xFF00
+        command_off: 0
+      - name: "Waveshare relay 2"
+        unique_id: "Waveshare relay 2"
+        device_address: 3
+        address: 2
+        write_type: coil
+        command_on: 0xFF00
+        command_off: 0
     lights:
       - name: "Light_1"
         unique_id: "Light 1"

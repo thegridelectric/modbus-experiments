@@ -37,12 +37,24 @@ We use:
 * 32MB SD card
 * [Home Assistant operating system]
 
-Clarity note - in Home Assistant:
+Sanity notes - in Home Assistant:
 * An "[add-on]" is a separate docker container that Home Assistant allows you to
   install. 
 * An "[integration]" is a piece of code running, one way or another, *within*
   Home Assistant.
+* An "[entity]" represents a sensor.
+* A "[device]" represents a physical device which can have one or more sensors.
 
+## Issues
+
+By default the HomeAssistant web page transmits the log user name and password
+in the clear. With access to the network, Wireshark can easily be used to capture
+login packet and the username/password is visible. It is *probably* possible to
+configure Home Assistant to use HTTPS so the password would be encrypted. See:
+* [securing Home Assistant] and
+* [DuckDNS add-on] and maybe
+* [YouTube video about securing Home Assistant] and probably
+* some googling. 
 
 ## Setup
 
@@ -56,9 +68,20 @@ Clarity note - in Home Assistant:
 See below for Modbus and Z-Wave instructions.
 
 ## Modbus
-...
-* [Modbus integration]
-* [example configuration.yaml](./configuration.yaml)
+Edit the configuration.yaml file to configure Modbus, per the
+[Modbus integration].
+
+see an [example configuration.yaml](./configuration.yaml) for configuration that
+communicates with a Taidecent thermometer and a Waveshare relay board.
+
+### Issues
+Non-trivial hardware interactions might require some work to reprsent accurately
+in Home Assistant. For example, the documented configuration cannot use the
+Waveshare relay board "write all" or "read all" commands. It writes the relays
+one at a time, and uses the success of the inividual write commands, not an
+actual read of the relay states. Additional custom config of some sort could
+*probably* make use the "write all" and "read all" commands, but it is unclear
+what is required.
 
 ## Z-Wave
 ...
@@ -85,10 +108,6 @@ These are options:
 * [Heltun Quinto relays]
 
 ## Hubitat connection
-
-## Relevant known issues
-* Security
-* Non-trivial modbus interactions
 
 # Rejected bridge options 
 
@@ -162,6 +181,12 @@ a Pi to run an MQTT broker.
 [Modbus integration]: https://www.home-assistant.io/integrations/modbus/
 [configuration.yaml]: https://www.home-assistant.io/docs/configuration/
 [File Editor]: https://www.home-assistant.io/common-tasks/os/#installing-and-using-the-file-editor-add-on
+[entity]: https://www.home-assistant.io/getting-started/concepts-terminology/#entities
+[device]: https://www.home-assistant.io/getting-started/concepts-terminology/#devices
+[securing Home Assistant]: https://www.home-assistant.io/docs/configuration/securing/
+[DuckDNS add-on]: https://www.home-assistant.io/integrations/duckdns/
+[YouTube video about securing Home Assistant]: https://www.youtube.com/watch?v=EQEpue7GhdI
+
 
 [Z-Wave]: . 
 [Z-Wave add-on]: https://www.home-assistant.io/integrations/zwave_js/
