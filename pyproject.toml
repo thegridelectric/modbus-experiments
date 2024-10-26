@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "mbe"
-version = "0.1.0"
+version = "0.1.1"
 description = "Code for experiments with modbus"
 authors = ["Andrew Schweitzer <schweitz72@gmail.com>"]
 license = "MIT"

@@ -8,6 +8,7 @@ import typer
 from serial import rs485
 
 from mbe import cli_rly
+from mbe import cli_mtr
 from mbe import cli_tai
 from mbe import make_client
 from mbe.cli_config import MbeConfig
@@ -19,6 +20,7 @@ from mbe.waveshare_relays import WaveshareRelays
 app = typer.Typer(no_args_is_help=True)
 app.add_typer(cli_tai.app, name="tai", help="Interact with taidecent thermometer")
 app.add_typer(cli_rly.app, name="rly", help="Interact with waveshare relays")
+app.add_typer(cli_mtr.app, name="mtr", help="Interact schneider electric meter")
 
 
 @app.callback()
@@ -59,6 +61,7 @@ def sniff(port: Optional[str] = None) -> None:
 def config(
     taidecent_device_id: Optional[int] = None,
     waveshare_relay_device_id: Optional[int] = None,
+    schneider_device_id: Optional[int] = None,
     serial: Annotated[
         Optional[bool], typer.Option(show_default=False, help="Set serial or tcp mode")
     ] = None,
@@ -93,6 +96,12 @@ def config(
         and waveshare_relay_device_id != cfg.waveshare_relay_device_id
     ):
         cfg.waveshare_relay_device_id = waveshare_relay_device_id
+        update_config = True
+    if (
+        schneider_device_id is not None
+        and schneider_device_id != cfg.schneider_device_id
+    ):
+        cfg.schneider_device_id = schneider_device_id
         update_config = True
     if serial is not None:
         mode = "serial" if serial else "tcp"

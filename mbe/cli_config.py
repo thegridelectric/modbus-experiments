@@ -9,6 +9,7 @@ from pydantic import BaseModel
 from pydantic import Field
 from pydantic import field_validator
 
+from mbe.schneider import SCHNEIDER_DEVICE_ID
 from mbe.taidecent import TAIDECENT_DEVICE_ID
 from mbe.waveshare_relays import WAVESHARE_RELAY_DEVICE_ID
 
@@ -54,6 +55,7 @@ class Modes(str, Enum):
 class MbeConfig(BaseModel):
     taidecent_device_id: int = TAIDECENT_DEVICE_ID
     waveshare_relay_device_id: int = WAVESHARE_RELAY_DEVICE_ID
+    schneider_device_id: int = SCHNEIDER_DEVICE_ID
     mode: Modes = Modes.serial
     serial: SerialConfig = SerialConfig()
     tcp: TCPConfig = TCPConfig()
