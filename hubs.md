@@ -230,7 +230,7 @@ a Pi to run an MQTT broker.
 [An explicit interface]: https://docs2.hubitat.com/en/developer/driver/building-a-lan-driver
 [not appear]: https://community.hubitat.com/t/modbus-driver-for-hubitat/20126/3
 [cannot import]: https://docs2.hubitat.com/en/developer/allowed-imports
-[good support]: https://docs2.hubitat.com/en/developer/interfaces/raw-socket-interface
+[don't really support]: https://docs2.hubitat.com/en/developer/interfaces/raw-socket-interface
 [Websockets]: https://docs2.hubitat.com/en/developer/interfaces/websocket-interface
 [Rule Machine]: https://docs2.hubitat.com/en/apps/rule-machine/rule-5-1
 [MQTT]: https://docs2.hubitat.com/en/developer/interfaces/mqtt-interface

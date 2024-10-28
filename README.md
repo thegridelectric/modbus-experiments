@@ -46,7 +46,7 @@ different contexts. Connectivity equipment includes:
   a serial-only bus.
 * [USB-C/USB-A] cable for connecting Macintosh to USB dongle.
 * [USB-A extension cable] for connecting Pi to USB dongle when a different
-  dongle, such as the [Zooz Z-Wave dongle] blocks access. 
+  dongle, such as the Zooz Z-Wave, blocks access. 
 
 ## Sniffing hardware and software
 In a diagnostic situation either IP or serial sniffing might be required. For IP
@@ -332,7 +332,8 @@ You can also filter by MAC address since you should be able to figure out the
 MAC address of the gateway. You might want to try pinging the device while the
 capture is running. 
 
-### Configuring multiple devices
+ 
+### <a name="configuring_multiple_devices">Configuring multiple devices</a>
 If multiple servers are present on a Modbus bus, they must have different device
 IDs. Generally devices ship with a the same default ID (1), so you have to
 change their device IDs. How to change their device ID must be documented by the
