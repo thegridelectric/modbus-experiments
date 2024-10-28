@@ -12,17 +12,6 @@ app = typer.Typer(no_args_is_help=True)
 
 
 @app.command()
-def read() -> None:
-    """Read temperature."""
-    cfg = MbeConfig.load()
-    client = make_client.make(cfg)
-    client.connect()
-    schneider = Schneider(client, device=cfg.schneider_device_id)
-    time.sleep(2)
-    schneider.read_registers()
-
-
-@app.command()
 def read_all() -> None:
     """Read all registers."""
     cfg = MbeConfig.load()
@@ -37,7 +26,7 @@ def read_all() -> None:
 def set_device_id(
     from_id: int = SCHNEIDER_DEVICE_ID_FACTORY, to_id: int = SCHNEIDER_DEVICE_ID
 ) -> None:
-    """Change the device id of the Taidecent thermometer."""
+    """Change the device id of the Schneider Electric Meter."""
     cfg = MbeConfig.load()
     client = make_client.make(cfg)
     client.connect()
